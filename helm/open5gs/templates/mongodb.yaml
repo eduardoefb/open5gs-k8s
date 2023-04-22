@@ -73,7 +73,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - mongodb.{{ .Values.istio_domain }}
+    - db.{{ .Values.istio_domain }}
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -81,7 +81,7 @@ metadata:
   name: {{ .Values.prefix }}-mongodb-vs
 spec:
   hosts:
-  - mongodb.{{ .Values.istio_domain }}
+  - db.{{ .Values.istio_domain }}
   gateways:
   - {{ .Values.prefix }}-mongodb-gw
   http:
