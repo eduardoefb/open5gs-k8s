@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-udr
+  labels:
+    app: {{ .Values.prefix }}-udr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-udr
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-udr
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-scp
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }} 
+        command:
+           - "/opt/wait_scp.sh"   
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+      - name: wait-mongodb
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}
+        command:
+           - "/opt/wait_mongodb.sh"   
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                                 
+      containers:
+      - name: {{ .Values.prefix }}-udr
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: NETYPE
+            value: udr  
+          - name: PREFIX
+            value: {{ .Values.prefix }}                
+        command:
+           - "/opt/start_app.sh"                 
+        volumeMounts:
+            - name: {{ .Values.prefix }}
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+        - containerPort: 27017
+        
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-udr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-udr
+  name: {{ .Values.prefix }}-udr
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  - port: 27017
+    name: mongodb
+    protocol: TCP
+    targetPort: 27017    
+  selector:
+    app: {{ .Values.prefix }}-udr
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-udr-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - udr.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-udr-vs
+spec:
+  hosts:
+  - udr.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-udr-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-udr
+        port:
+          number: 8080  

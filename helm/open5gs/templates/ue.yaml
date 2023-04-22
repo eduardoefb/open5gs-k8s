@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-ue
+  labels:
+    app: {{ .Values.prefix }}-ue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-ue
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-ue
+      #annotations:
+      #  sidecar.istio.io/inject: "false"        
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0          
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-gnodeb
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_gnodeb.sh"  
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                   
+      containers:
+      - name: {{ .Values.prefix }}-ue
+        image: {{ .Values.registry_url }}/{{ .Values.ueramsim_image_name }}:{{ .Values.image_tag }} 
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]              
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]   
+        env:
+          - name: NETYPE
+            value: ue   
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+        command:
+          - "/opt/start_ue.sh"
+        volumeMounts:
+            - name: {{ .Values.prefix }}
+              mountPath: /opt/open5gs/config/
+            - name: dev-tun
+              mountPath: /dev/net/tun              
+        ports:
+        - containerPort: 2152
+        - containerPort: 8805
+        - containerPort: 9090
+        
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-subscriber
+        - name: dev-tun            
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice            
+

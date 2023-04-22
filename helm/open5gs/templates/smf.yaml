@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-smf
+  labels:
+    app: {{ .Values.prefix }}-smf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-smf
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-smf
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-scp
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_scp.sh"
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}             
+      - name: wait-upf
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_upf.sh"   
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}           
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                          
+      containers:
+      - name: {{ .Values.prefix }}-smf
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: NETYPE
+            value: smf
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+        - containerPort: 8805
+        - containerPort: 2123
+        - containerPort: 2152
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-smf
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-smf
+  name: {{ .Values.prefix }}-smf
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  - port: 8805
+    name: udp1
+    protocol: UDP
+    targetPort: 8805    
+  - port: 2123
+    name: udp2
+    protocol: UDP
+    targetPort: 2123    
+  - port: 2152
+    name: udp3
+    protocol: UDP
+    targetPort: 2152     
+  selector:
+    app: {{ .Values.prefix }}-smf
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-smf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - smf.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-smf-vs
+spec:
+  hosts:
+  - smf.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-smf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-smf
+        port:
+          number: 8080               

@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-nrf
+  labels:
+    app: {{ .Values.prefix }}-nrf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-nrf
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-nrf
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-scp
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}
+        command:
+           - "/opt/wait_scp_service.sh"  
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                       
+      containers:
+      - name: {{ .Values.prefix }}-nrf
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: NETYPE
+            value: nrf 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                  
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: {{ .Values.prefix }}
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-nrf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-nrf
+  name: {{ .Values.prefix }}-nrf
+
+spec:
+  ports:
+  - port: 8080
+    name: http2 
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: {{ .Values.prefix }}-nrf
+  sessionAffinity: None
+  type: ClusterIP            
+
+
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-nrf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - nrf.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-nrf-vs
+spec:
+  hosts:
+  - nrf.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-nrf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-nrf
+        port:
+          number: 8080        

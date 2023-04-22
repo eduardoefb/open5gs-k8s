@@ -1,0 +1,31 @@
+FROM ubuntu:20.04
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl software-properties-common iproute2 nghttp2 net-tools gcc g++ make build-essential vim
+RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:open5gs/latest
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install open5gs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install nodejs
+RUN groupmod open5gs -g 1024
+RUN usermod open5gs -u 1024 -G open5gs
+RUN mkdir /home/open5gs
+RUN chown -R open5gs:open5gs /etc/open5gs/
+RUN chown -R open5gs:open5gs /var/log/open5gs/
+RUN chown -R open5gs:open5gs /var/lib/mongodb/
+RUN chown -R open5gs:open5gs /usr/bin/open5gs*
+RUN chown -R open5gs:open5gs /home/open5gs/
+RUN usermod open5gs -d /home/open5gs/
+RUN chown -R open5gs:open5gs /var/log/mongodb/
+RUN mkdir -p /run/mongodb
+COPY mongodb.conf /etc/mongodb.conf
+RUN chown -R open5gs:open5gs /run/mongodb
+RUN chown -R open5gs:open5gs /etc/mongodb.conf
+COPY install_npm.sh /opt/install_npm
+COPY post_install_npm.sh /opt/post_install_npm
+COPY start_mongodb.sh /opt/start_mongodb.sh
+COPY start_app.sh /opt/start_app.sh
+RUN cd /opt/ && bash install_npm
+RUN mkdir -p /opt/open5gs
+RUN chown -R open5gs:open5gs /opt/open5gs*
+RUN chmod +x /opt/start_mongodb.sh
+RUN chmod +x /opt/start_app.sh

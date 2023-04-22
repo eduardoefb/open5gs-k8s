@@ -1,0 +1,8 @@
+FROM ubuntu:22.04
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common curl cmake build-essential make g++ libsctp-dev lksctp-tools iproute2 git
+RUN cd /opt && git clone https://github.com/aligungr/UERANSIM && cd /opt/UERANSIM && git checkout
+RUN cd /opt/UERANSIM && make
+COPY start_app.sh /opt/start_app.sh
+RUN chmod +x /opt/start_app.sh

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-amf
+  labels:
+    app: {{ .Values.prefix }}-amf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-amf
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-amf
+      #annotations:
+      #  sidecar.istio.io/inject: "false"
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-scp
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_scp.sh"  
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                 
+      containers:
+      - name: {{ .Values.prefix }}-amf
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: NETYPE
+            value: amf
+          - name: PREFIX
+            value: {{ .Values.prefix }}            
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: {{ .Values.prefix }}
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 38412
+          protocol: SCTP
+          name: sctp
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-amf
+          

@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-udm
+  labels:
+    app: {{ .Values.prefix }}-udm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-udm
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-udm
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-scp
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_scp.sh"  
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}             
+      containers:
+      - name: {{ .Values.prefix }}-smf
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}  
+        env:
+          - name: NETYPE
+            value: udm 
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: open5gs-hnet
+              mountPath: /etc/open5gs/hnet
+
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-udm
+        - name: {{ .Values.prefix }}-hnet
+          secret:
+            secretName: hnet
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-udm
+  name: {{ .Values.prefix }}-udm
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080  
+  selector:
+    app: {{ .Values.prefix }}-udm
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-udm-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - udm.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-udm-vs
+spec:
+  hosts:
+  - udm.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-udm-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-udm
+        port:
+          number: 8080  

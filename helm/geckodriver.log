@@ -1,0 +1,296 @@
+1682179922786	geckodriver	INFO	Listening on 127.0.0.1:59709
+1682179922818	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "51445" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilebNiDhR"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682179923195	Marionette	INFO	Marionette enabled
+1682179923198	Marionette	INFO	Listening on port 36159
+Read port: 36159
+WebDriver BiDi listening on ws://127.0.0.1:51445
+1682179923273	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilebNiDhR/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://50f8fa61-9e68-4c35-9902-3cf59b18e9da/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:51445/devtools/browser/0266ac34-9333-4261-93df-3bd81ee17ed3
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682179948731	Marionette	INFO	Stopped listening on port 36159
+1682182209751	geckodriver	INFO	Listening on 127.0.0.1:59535
+1682182209784	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "51919" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileouekk5"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682182210163	Marionette	INFO	Marionette enabled
+1682182210166	Marionette	INFO	Listening on port 42493
+Read port: 42493
+WebDriver BiDi listening on ws://127.0.0.1:51919
+1682182210243	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileouekk5/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://62f8d22b-b203-4bbd-96b8-a6c392caff11/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:51919/devtools/browser/9434d3fc-ab58-4466-bb24-e31a6c4e10d5
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682182234133	Marionette	INFO	Stopped listening on port 42493
+1682182520028	geckodriver	INFO	Listening on 127.0.0.1:53969
+1682182520061	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "41577" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileUFQL46"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682182520439	Marionette	INFO	Marionette enabled
+1682182520442	Marionette	INFO	Listening on port 36583
+Read port: 36583
+WebDriver BiDi listening on ws://127.0.0.1:41577
+1682182520518	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileUFQL46/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://278c7244-b914-4850-818f-f37ca8e31410/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:41577/devtools/browser/007ac53b-7962-4c33-9dbd-357ceb6407b6
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682182543684	Marionette	INFO	Stopped listening on port 36583
+1682182561923	geckodriver	INFO	Listening on 127.0.0.1:52095
+1682182561956	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "38759" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileDfzosw"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682182562337	Marionette	INFO	Marionette enabled
+1682182562340	Marionette	INFO	Listening on port 33859
+Read port: 33859
+WebDriver BiDi listening on ws://127.0.0.1:38759
+1682182562416	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileDfzosw/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://61720875-2ae5-4fd4-92d4-f25906da5603/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:38759/devtools/browser/35d2fe57-8a25-4674-a500-7bb2b7e6c7ec
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1682185105011	geckodriver	INFO	Listening on 127.0.0.1:54557
+1682185105043	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "56931" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileT4VjEC"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682185105423	Marionette	INFO	Marionette enabled
+1682185105426	Marionette	INFO	Listening on port 35059
+Read port: 35059
+WebDriver BiDi listening on ws://127.0.0.1:56931
+1682185105502	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileT4VjEC/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://abfbee14-a491-4a9a-b4ba-fef6f0d0efaa/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:56931/devtools/browser/1d11c374-459e-460e-8261-75f763df4c3d
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682185114412	Marionette	INFO	Stopped listening on port 35059
+console.error: (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.jsm", 237))
+JavaScript error: resource://services-settings/Utils.jsm, line 237: TypeError: NetworkError: Network request failed
+1682185114821	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682186986234	geckodriver	INFO	Listening on 127.0.0.1:50603
+1682186986267	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "60589" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileDJ4kry"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682186986644	Marionette	INFO	Marionette enabled
+1682186986647	Marionette	INFO	Listening on port 42657
+Read port: 42657
+WebDriver BiDi listening on ws://127.0.0.1:60589
+1682186986723	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileDJ4kry/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://aed719e9-ed86-4455-a63b-ed746327fe1d/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:60589/devtools/browser/581526db-319e-4c34-9664-549ca04bbf05
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682186996395	Marionette	INFO	Stopped listening on port 42657
+console.error: (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.jsm", 237))
+JavaScript error: resource://services-settings/Utils.jsm, line 237: TypeError: NetworkError: Network request failed
+1682186997422	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682187456670	geckodriver	INFO	Listening on 127.0.0.1:41195
+1682187456703	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "59937" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileGEZSab"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682187457081	Marionette	INFO	Marionette enabled
+1682187457084	Marionette	INFO	Listening on port 33819
+Read port: 33819
+WebDriver BiDi listening on ws://127.0.0.1:59937
+1682187457161	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileGEZSab/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://36374a16-2a37-4980-bbc2-05639bdde393/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:59937/devtools/browser/20ab7328-0d66-4709-9da3-468fa3c479c3
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682187464782	Marionette	INFO	Stopped listening on port 33819
+console.error: (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.jsm", 237))
+JavaScript error: resource://services-settings/Utils.jsm, line 237: TypeError: NetworkError: Network request failed
+1682187465157	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682188163727	geckodriver	INFO	Listening on 127.0.0.1:43731
+1682188163760	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "48659" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileTEFVTB"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682188164136	Marionette	INFO	Marionette enabled
+1682188164139	Marionette	INFO	Listening on port 41177
+Read port: 41177
+WebDriver BiDi listening on ws://127.0.0.1:48659
+1682188164214	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileTEFVTB/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://15e7db33-3d1d-44f5-8fa2-69c274d04277/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:48659/devtools/browser/3bf6821c-2e61-407b-a011-1ea4a4a0f644
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682188182869	Marionette	INFO	Stopped listening on port 41177
+1682188183008	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682189333374	geckodriver	INFO	Listening on 127.0.0.1:34583
+1682189333407	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "41649" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilem9CyC2"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682189333787	Marionette	INFO	Marionette enabled
+1682189333790	Marionette	INFO	Listening on port 39367
+Read port: 39367
+WebDriver BiDi listening on ws://127.0.0.1:41649
+1682189333865	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilem9CyC2/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://5d2595a3-cdcd-448f-bc7b-5b41ec489127/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:41649/devtools/browser/78420cf3-283d-47fb-a8e1-b5028d57f408
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682189343824	Marionette	INFO	Stopped listening on port 39367
+console.error: (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.jsm", 237))
+JavaScript error: resource://services-settings/Utils.jsm, line 237: TypeError: NetworkError: Network request failed
+1682189344855	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682190310259	geckodriver	INFO	Listening on 127.0.0.1:56057
+1682190310292	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "58027" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilei6TMJv"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682190310673	Marionette	INFO	Marionette enabled
+1682190310676	Marionette	INFO	Listening on port 42803
+Read port: 42803
+WebDriver BiDi listening on ws://127.0.0.1:58027
+1682190310752	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilei6TMJv/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://204d4053-0ab0-400f-bdac-5f2bafa3044e/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:58027/devtools/browser/d2914859-cea2-4281-b623-81f362e01bf3
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682190324802	Marionette	INFO	Stopped listening on port 42803
+1682190325019	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682191546206	geckodriver	INFO	Listening on 127.0.0.1:58301
+1682191546239	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "48723" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileY8wTiV"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682191546618	Marionette	INFO	Marionette enabled
+1682191546621	Marionette	INFO	Listening on port 44379
+Read port: 44379
+WebDriver BiDi listening on ws://127.0.0.1:48723
+1682191546697	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileY8wTiV/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://836367c8-c39f-42f6-8fb7-7ed8dedc282c/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:48723/devtools/browser/e89f9a93-2020-4645-a239-4b6203d0a104
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682191571803	Marionette	INFO	Stopped listening on port 44379
+1682191646359	geckodriver	INFO	Listening on 127.0.0.1:54427
+1682191646392	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "59977" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileYZmz9R"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682191646775	Marionette	INFO	Marionette enabled
+1682191646778	Marionette	INFO	Listening on port 34289
+Read port: 34289
+WebDriver BiDi listening on ws://127.0.0.1:59977
+1682191646854	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileYZmz9R/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://1c6b2afe-0b9a-466b-9dc8-1a13ca3bb2df/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:59977/devtools/browser/ee08a59d-5d70-4f65-b5ef-784fa6bdf39a
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682191656564	Marionette	INFO	Stopped listening on port 34289
+console.error: (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.jsm", 237))
+JavaScript error: resource://services-settings/Utils.jsm, line 237: TypeError: NetworkError: Network request failed
+1682191657304	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)
+1682200199817	geckodriver	INFO	Listening on 127.0.0.1:59199
+1682200199850	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "48273" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileOoZ5Kn"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682200200227	Marionette	INFO	Marionette enabled
+1682200200230	Marionette	INFO	Listening on port 43875
+Read port: 43875
+WebDriver BiDi listening on ws://127.0.0.1:48273
+1682200200306	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileOoZ5Kn/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://0ae972d2-a743-44b3-baf4-d638f20c051f/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:48273/devtools/browser/cd1d8b34-9738-4fab-8ab6-d6a0ef4df1ae
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+1682200204934	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+1682200215659	Marionette	INFO	Stopped listening on port 43875
+1682200245224	geckodriver	INFO	Listening on 127.0.0.1:53101
+1682200245749	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "56091" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile1mBNAo"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682200246133	Marionette	INFO	Marionette enabled
+1682200246136	Marionette	INFO	Listening on port 44227
+Read port: 44227
+WebDriver BiDi listening on ws://127.0.0.1:56091
+1682200246213	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: ({})
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofile1mBNAo/search.json.mozlz4", (void 0)))
+JavaScript warning: moz-extension://b631bd1f-237e-4f8a-8b78-5484d4d3256f/background.js, line 0: Successfully compiled asm.js code (total compilation time 0ms)
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:56091/devtools/browser/29e968a1-87ae-4d6c-a5d8-cd0d3ceac413
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 58: Error: Can't find profile directory.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://db.open5gs.int."
+1682200256529	Marionette	INFO	Stopped listening on port 44227
+1682200256749	geckodriver::marionette	ERROR	Failed to close browser connection: Socket not connected (os error 107)

@@ -1,0 +1,64 @@
+apiVersion: v1
+data:
+  amf.yaml: |
+    logger:
+        file: /var/log/open5gs/amf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/amf.key
+          cert: /etc/open5gs/tls/amf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/amf.key
+          cert: /etc/open5gs/tls/amf.crt
+
+    amf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+        ngap:
+          - addr: 0.0.0.0
+        metrics:
+            addr: 0.0.0.0
+            port: 9090
+        guami:
+          - plmn_id:
+              mcc: {{ .Values.mcc }}
+              mnc: {{ .Values.mnc }}
+            amf_id:
+              region: 2
+              set: 1
+        tai:
+          - plmn_id:
+              mcc: {{ .Values.mcc }}
+              mnc: {{ .Values.mnc }}
+            tac: {{ .Values.tac }}
+        plmn_support:
+          - plmn_id:
+              mcc: {{ .Values.mcc }}
+              mnc: {{ .Values.mnc }}
+            s_nssai:
+              - sst: 1
+        security:
+            integrity_order : [ NIA2, NIA1, NIA0 ]
+            ciphering_order : [ NEA0, NEA1, NEA2 ]
+        network_name:
+            full: Open5GS
+        amf_name: {{ .Values.prefix }}-amf0
+    scp:
+        sbi:
+          - addr: {{ .Values.prefix }}-scp
+            port: 8080
+    parameter:
+    max:
+    usrsctp:
+    time:
+      t3512:
+        value: 540     # 9 mintues * 60 = 540 seconds
+
+kind: ConfigMap
+metadata:
+  name: {{ .Values.prefix }}-amf

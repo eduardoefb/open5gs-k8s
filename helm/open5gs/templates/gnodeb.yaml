@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-gnodeb
+  labels:
+    app: {{ .Values.prefix }}-gnodeb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-gnodeb
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-gnodeb
+      #annotations:
+      #  sidecar.istio.io/inject: "false"        
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0          
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-amf
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_amf.sh" 
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                    
+      containers:
+      - name: {{ .Values.prefix }}-gnodeb
+        image: {{ .Values.registry_url }}/{{ .Values.ueramsim_image_name }}:{{ .Values.image_tag }} 
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]              
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]   
+        env:
+          - name: NETYPE
+            value: gnodeb   
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+        command:
+           - "/opt/start_gnodeb.sh"                 
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: dev-tun
+              mountPath: /dev/net/tun              
+        ports:
+        - containerPort: 2152
+        - containerPort: 4497
+        - containerPort: 43075
+        
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-gnodeb
+        - name: dev-tun            
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice            
+
+
+
+

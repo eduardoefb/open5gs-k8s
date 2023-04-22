@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-mongodb
+  labels:
+    app: {{ .Values.prefix }}-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-mongodb
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-mongodb
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      containers:
+      - name: {{ .Values.prefix }}-mongodb
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}   
+        command: ["/bin/bash","-c"]
+        args: ["/opt/start_mongodb.sh"]
+        #volumeMounts:
+        #    - name: open5gs
+        #      mountPath: /etc/open5gs
+        ports:
+        - containerPort: 3000
+        - containerPort: 27017
+        
+      #volumes:
+      #  - name: {{ .Values.prefix }}
+      #    configMap:
+      #      name: {{ .Values.prefix }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-mongodb
+  name: {{ .Values.prefix }}-mongodb
+
+spec:
+  ports:
+  - port: 3000
+    name: sbi
+    protocol: TCP
+    targetPort: 3000
+  - port: 27017
+    name: mongodb
+    protocol: TCP
+    targetPort: 27017    
+  selector:
+    app: {{ .Values.prefix }}-mongodb
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-mongodb-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - mongodb.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-mongodb-vs
+spec:
+  hosts:
+  - mongodb.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-mongodb-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-mongodb
+        port:
+          number: 3000

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-scp
+  labels:
+    app: {{ .Values.prefix }}-scp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-scp
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-scp
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      initContainers:
+      - name: wait-nrf
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}
+        command:
+           - "/opt/wait_nrf.sh"    
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}                
+      containers:
+      - name: {{ .Values.prefix }}-scp
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: NETYPE
+            value: scp   
+          - name: PREFIX
+            value: {{ .Values.prefix }}               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: {{ .Values.prefix }}
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: {{ .Values.prefix }}
+          configMap:
+            name: {{ .Values.prefix }}-scp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.prefix }}-scp
+  name: {{ .Values.prefix }}-scp
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: {{ .Values.prefix }}-scp
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .Values.prefix }}-scp-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - scp.{{ .Values.istio_domain }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.prefix }}-scp-vs
+spec:
+  hosts:
+  - scp.{{ .Values.istio_domain }}
+  gateways:
+  - {{ .Values.prefix }}-scp-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: {{ .Values.prefix }}-scp
+        port:
+          number: 8080  
