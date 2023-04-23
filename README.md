@@ -95,5 +95,6 @@ nghttp -v 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?service-names=nsmf-p
 
 nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDR&requester-nf-type=PCF'
 nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDM&requester-nf-type=AMF'
+nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDRrequester-nf-type=UDM'
 
 ```

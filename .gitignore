@@ -2,3 +2,6 @@ helm_bkp
 image_bkp
 vars.sh
 yaml
+hnet_bkp
+helm/geckodriver.log
+hnet_kbp/
