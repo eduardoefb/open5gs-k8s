@@ -13,8 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.prefix }}-ue
-      #annotations:
-      #  sidecar.istio.io/inject: "false"        
+      annotations:
+        sidecar.istio.io/inject: "false"        
     spec:
       securityContext:
         runAsUser: 0
@@ -35,10 +35,7 @@ spec:
         image: {{ .Values.registry_url }}/{{ .Values.ueramsim_image_name }}:{{ .Values.image_tag }} 
         securityContext:
           capabilities:
-            add: ["NET_ADMIN", "SYS_TIME"]              
-        securityContext:
-          capabilities:
-            add: ["NET_ADMIN"]   
+            add: ["NET_ADMIN", "SYS_TIME"]
         env:
           - name: NETYPE
             value: ue   
@@ -55,6 +52,16 @@ spec:
         - containerPort: 2152
         - containerPort: 8805
         - containerPort: 9090
+        livenessProbe:
+          exec:
+            command:
+              - ip 
+              - addr 
+              - show 
+              - dev 
+              - uesimtun0
+          initialDelaySeconds: 10
+          periodSeconds: 5
         
       volumes:
         - name: {{ .Values.prefix }}

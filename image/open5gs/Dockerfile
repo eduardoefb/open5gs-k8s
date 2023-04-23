@@ -5,7 +5,8 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
 # Install required packages:
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl software-properties-common iproute2 nghttp2 net-tools gcc g++ make build-essential vim
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl software-properties-common iproute2 nghttp2 net-tools gcc g++ make build-essential vim 
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install iptables
 
 # Install Open5GS from PPA repository:
 RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:open5gs/latest && \

@@ -9,7 +9,9 @@ data:
         gtpu:
           - addr: 0.0.0.0
         subnet:
-          - addr: 10.45.0.1/16      
+          - addr: 10.45.0.1/16
+            dnn: internet
+            dev: ogstun
         metrics:
           - addr: 0.0.0.0
             port: 9090

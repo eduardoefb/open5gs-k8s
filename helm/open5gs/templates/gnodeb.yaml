@@ -13,8 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.prefix }}-gnodeb
-      #annotations:
-      #  sidecar.istio.io/inject: "false"        
+      annotations:
+        sidecar.istio.io/inject: "false"        
     spec:
       securityContext:
         runAsUser: 0

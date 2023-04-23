@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dbctl
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"  
+    spec:
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      
+      initContainers: 
+      - name: wait-mongodb
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        command:
+           - "/opt/wait_mongodb.sh" 
+        env: 
+          - name: PREFIX
+            value: {{ .Values.prefix }}              
+
+      containers:
+      - name: dbctl
+        image: {{ .Values.registry_url }}/{{ .Values.dbctl_image_name }}:{{ .Values.image_tag }}
+        env:
+          - name: PREFIX
+            value: {{ .Values.prefix }}          
+        command: ["/home/open5gs/subscriber_create.sh"]
+        volumeMounts:
+        - name: subscriber-data
+          mountPath: /opt/open5gs/        
+      restartPolicy: Never
+      securityContext:
+         runAsUser: 1024
+         runAsGroup: 1024
+      volumes:
+      - name: subscriber-data
+        configMap:
+          name: {{ .Values.prefix }}-subscriber
+  backoffLimit: 10

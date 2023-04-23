@@ -5,7 +5,8 @@ registry_url: registry.kube.int/open5gs
 init_image_name: init
 open5gs_image_name: open5gs
 ueramsim_image_name: ueramsim
-image_tag: 0.0.1
+dbctl_image_name: dbctl
+image_tag: 0.0.12
 mcc: 724
 mnc: 17
 tac: 100

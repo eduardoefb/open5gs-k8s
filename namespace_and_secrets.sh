@@ -1,4 +1,5 @@
 
+export NAMESPACE="open5gs"
 export REGISTRY_SECRET_NAME="open5gs-secret"
 export REGISTRY_URL="registry.kube.int/open5gs"
 echo "Enter the retistry url: Default: ${REGISTRY_URL}"
@@ -8,41 +9,22 @@ if [ ! -z "${r}" ]; then
    REGISTRY_URL=${r}
 fi
 
-echo "Enter your registry username:"
-read reg_user
+podman login ${REGISTRY_URL}
+kubectl create namespace ${NAMESPACE}
+kubectl config set-context --current --namespace=${NAMESPACE}
+kubectl label namespace ${NAMESPACE} istio-injection=enabled
 
-while :; do
-    echo "Enter your registry pass:"
-    read -s reg_pass
-    echo "Re-enter your registry pass:"
-    read -s rereg_pass
-    if [ "${reg_pass}" == "${rereg_pass}" ]; then
-        break
-    fi
-    echo "Passwords don't match!"
-done
-
-REGISTRY_CREDENTIALS="${reg_user}:${reg_pass}"
-cat << EOF > /tmp/secret.json
-{
-   "auths": {
-      "registry.kube.int": {
-         "auth": "`echo -n "${reg_user}:${reg_pass}" | base64`"
-      }
-   }
-}
-EOF
 
 kubectl delete secret ${REGISTRY_SECRET_NAME}
 kubectl create secret generic ${REGISTRY_SECRET_NAME} \
-    --from-file=.dockerconfigjson=/tmp/secret.json \
+    --from-file=.dockerconfigjson=${XDG_RUNTIME_DIR}/containers/auth.json \
     --type=kubernetes.io/dockerconfigjson
 kubectl get secret ${REGISTRY_SECRET_NAME}
-rm /tmp/secret.json
+
 
 # HNET keys:
 cwd=`pwd`
-tmp_dir=`mktemp d`
+tmp_dir=`mktemp -d`
 cd ${tmp_dir}
 mkdir hnet
 cd hnet
