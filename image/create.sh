@@ -8,6 +8,7 @@ export REGISTRY_URL="registry.kube.int/open5gs"
 
 
 cwd=`pwd`
+podman login ${REGISTRY_URL}
 # Clear images
 podman rmi --all -f
 
