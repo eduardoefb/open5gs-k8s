@@ -5,3 +5,7 @@ yaml
 hnet_bkp
 helm/geckodriver.log
 hnet_kbp/
+config.yml
+etchosts.sh
+subscriber.py
+vars.yml
