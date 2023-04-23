@@ -60,8 +60,6 @@ rm sec*.pem
 done
 
 cd ${tmp_dir}
-
 kubectl create secret generic  hnet --from-file=hnet/
-
 cd ${cwd}
-rm -rf ${tmp_dir}
+
