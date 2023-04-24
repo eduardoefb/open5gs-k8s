@@ -52,20 +52,6 @@ kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.l
 kubectl get virtualservice
 ```
 
-## Create the subscriber
-To begin, access the MongoDB URL that corresponds to the virtual service named <prefix>-mongodb-vs. Once you've accessed the URL, your next step will be to create the subscribers. It's crucial to ensure that the subscriber you define in your helm chart's values.yaml file is created precisely as specified to guarantee the proper functioning of the system. So, be sure to double-check your subscriber's configuration before proceeding.
-
-The default user and password is admin/1423
-
-
-## Delete ue pod
-After creating the subscriber, delete the UE pod to prompt a reconnection attempt to the 5G network. Then, carefully monitor the process to ensure that the connection is reestablished correctly.
-
-Example:
-```shell
-kubectl logs -f open5gs-ue-bcc56fb8f-kwtqf
-```
-
 ## Curl tests:
 ```shell
 
