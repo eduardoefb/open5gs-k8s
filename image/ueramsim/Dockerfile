@@ -1,32 +1,32 @@
 FROM ubuntu:22.04 AS builder
 
+LABEL maintainer="eduardoefb@gmail.com"
+
 # Update package and install needed files:
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common curl cmake build-essential make g++ libsctp-dev lksctp-tools iproute2 git 
 
 # Download ueramsim and build it:
-RUN cd /opt && git clone https://github.com/aligungr/UERANSIM && \
-    cd /opt/UERANSIM && \
-    git checkout && \
-    cd /opt/UERANSIM && \
+WORKDIR /opt
+RUN git clone https://github.com/aligungr/UERANSIM && \
+    cd UERANSIM && \
+    git checkout && \    
     make
 
 FROM ubuntu:22.04
 
-# Update packages:
+LABEL maintainer="eduardoefb@gmail.com"
+
+# Update packages and install kubectl:
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils -y
+    DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils -y && \
+    cd /tmp/ && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    mv /tmp/kubectl /usr/local/bin/kubectl
 
 # Copy files:
-COPY --from=builder /opt/UERANSIM /opt/UERANSIM    
-COPY start_gnodeb.sh /opt/start_gnodeb.sh
-RUN chmod +x /opt/start_gnodeb.sh
-COPY start_ue.sh /opt/start_ue.sh
-RUN chmod +x /opt/start_ue.sh
+COPY --from=builder --chown=root:root /opt/UERANSIM /opt/UERANSIM    
+COPY --chown=root:root start_gnodeb.sh /opt/start_gnodeb.sh
+COPY --chown=root:root start_ue.sh /opt/start_ue.sh
 
-# Download kubectl
-RUN cd /tmp/ && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    mv /tmp/kubectl /usr/local/bin/kubectl && \
-    chmod +x /usr/local/bin/kubectl
+RUN chmod +x /opt/start_ue.sh /opt/start_gnodeb.sh /usr/local/bin/kubectl
+

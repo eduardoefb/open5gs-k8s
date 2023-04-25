@@ -6,10 +6,13 @@ init_image_name: init
 open5gs_image_name: open5gs
 ueramsim_image_name: ueramsim
 dbctl_image_name: dbctl
-image_tag: 0.0.12
+image_tag: 0.0.3
 mcc: 724
 mnc: 17
 tac: 100
+upf_ip: "10.45.0.1"
+upf_mask: "16"
+istio_enabled: true 
 istio_domain: open5gs.int
 subscriber:
   imsi: '724170000000001'

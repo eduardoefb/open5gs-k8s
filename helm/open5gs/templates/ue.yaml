@@ -40,7 +40,7 @@ spec:
           - name: NETYPE
             value: ue   
           - name: PREFIX
-            value: {{ .Values.prefix }}               
+            value: {{ .Values.prefix }}  
         command:
           - "/opt/start_ue.sh"
         volumeMounts:
@@ -55,11 +55,11 @@ spec:
         livenessProbe:
           exec:
             command:
-              - ip 
-              - addr 
-              - show 
-              - dev 
-              - uesimtun0
+              - "ping" 
+              - "-c" 
+              - "1" 
+              - "{{ .Values.upf_ip }}"
+              
           initialDelaySeconds: 10
           periodSeconds: 5
         

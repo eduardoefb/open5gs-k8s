@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.prefix }}-mongodb
+      annotations:
+        sidecar.istio.io/inject: "{{ .Values.istio_enabled }}"        
     spec:
       securityContext:
         runAsUser: 1024

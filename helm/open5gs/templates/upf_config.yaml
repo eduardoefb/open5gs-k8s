@@ -9,7 +9,7 @@ data:
         gtpu:
           - addr: 0.0.0.0
         subnet:
-          - addr: 10.45.0.1/16
+          - addr: {{ .Values.upf_ip }}/{{ .Values.upf_mask }}
             dnn: internet
             dev: ogstun
         metrics:

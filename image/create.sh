@@ -4,7 +4,7 @@ export UERAMSIM_IMAGE_NAME="ueramsim"
 export INIT_IMAGE_NAME="init"
 export OPEN5GS_IMAGE_NAME="open5gs"
 export DBCTL_IMAGE_NAME="dbctl"
-export IMAGE_TAG="0.0.12"
+export IMAGE_TAG="0.0.3"
 export REGISTRY_URL="registry.kube.int/open5gs"
 
 set -x
