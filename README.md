@@ -60,12 +60,13 @@ Example:
 
 Verify the routing table:
 ```shell
-kubectl exec -it open5gs-ue-0 -c open5gs-ue -- ip route
+PREFIX="open5gs"
+kubectl exec -it ${PREFIX}-ue-0 -c ${PREFIX}-ue -- ip route
 ```
 
 Example:
 ```log
-~> kubectl exec -it open5gs-ue-0 -c open5gs-ue -- ip route
+~> kubectl exec -it ${PREFIX}-ue-0 -c ${PREFIX}-ue -- ip route
 default dev uesimtun0 scope link 
 default via 169.254.1.1 dev eth0 metric 10 
 10.233.0.1 via 169.254.1.1 dev eth0 
@@ -75,12 +76,13 @@ default via 169.254.1.1 dev eth0 metric 10
 
 Check connectivity with the external network:
 ```shell
-kubectl exec -it open5gs-ue-0 -c open5gs-ue -- traceroute -n 1.1.1.1
+PREFIX="open5gs"
+kubectl exec -it ${PREFIX}-ue-0 -c ${PREFIX}-ue -- traceroute -n 1.1.1.1
 ```
 
 The route shoud be via UPF's  ip `10.45.0.1`:
 ```log
-~> kubectl exec -it open5gs-ue-0 -c open5gs-ue -- traceroute -n 1.1.1.1
+~> kubectl exec -it ${PREFIX}-ue-0 -c ${PREFIX}-ue -- traceroute -n 1.1.1.1
 traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
  1  10.45.0.1  4.965 ms  4.909 ms  4.853 ms  
  2  10.20.0.47  4.867 ms  4.901 ms  4.829 ms
@@ -120,7 +122,25 @@ kubectl exec -it ${PREFIX}-amf-0 -it -- \
    nghttp http://${PREFIX}-udm:8080/nudm-sdm/v2/imsi-${SUPI}/am-data  \
    -H':method: GET' \
    -H'user-agent: AMF'
+```
 
+Example:
+```log
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-udm:8080/nudm-sdm/v2/imsi-${SUPI}/am-data  \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+{
+	"subscribedUeAmbr":	{
+		"uplink":	"976562 Kbps",
+		"downlink":	"976562 Kbps"
+	},
+	"nssai":	{
+		"defaultSingleNssais":	[{
+				"sst":	1
+			}]
+	}
+}~> 
 ```
 
 - UDM - Show am-data from subscriber via SCP:
@@ -133,7 +153,25 @@ kubectl exec -it ${PREFIX}-amf-0 -it -- \
    -H':method: GET' \
    -H'user-agent: AMF'
 ```
-
+Example:
+```log
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-scp:8080/nudm-sdm/v2/imsi-${SUPI}/am-data  \
+   -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udm:8080" \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+{
+	"subscribedUeAmbr":	{
+		"uplink":	"976562 Kbps",
+		"downlink":	"976562 Kbps"
+	},
+	"nssai":	{
+		"defaultSingleNssais":	[{
+				"sst":	1
+			}]
+	}
+}
+```
 
 - UDR - Get subscription data:
 ```shell
@@ -143,7 +181,23 @@ kubectl exec -it ${PREFIX}-udm-0 -it -- \
    nghttp http://${PREFIX}-udr:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
    -H':method: GET' \
    -H'user-agent: UDM'
+```
 
+Example:
+```log
+kubectl exec -it ${PREFIX}-udm-0 -it -- \
+   nghttp http://${PREFIX}-udr:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
+   -H':method: GET' \
+   -H'user-agent: UDM'
+{
+	"authenticationMethod":	"5G_AKA",
+	"encPermanentKey":	"465b5ce8b199b49faa5f0a2ee238a6b0",
+	"sequenceNumber":	{
+		"sqn":	"000000000081"
+	},
+	"authenticationManagementField":	"8000",
+	"encOpcKey":	"e8ed289deba952e4283b54e88e6183c0"
+}
 ```
 
 - UDR - Get subscription data scp:
@@ -155,24 +209,126 @@ kubectl exec -it ${PREFIX}-udm-0 -it -- \
    -H':method: GET' \
    -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udr:8080" \
    -H'user-agent: UDM'
-   
+```
+
+Example:
+```log
+~> kubectl exec -it ${PREFIX}-udm-0 -it -- \
+   nghttp http://${PREFIX}-scp:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
+   -H':method: GET' \
+   -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udr:8080" \
+   -H'user-agent: UDM'
+{
+	"authenticationMethod":	"5G_AKA",
+	"encPermanentKey":	"465b5ce8b199b49faa5f0a2ee238a6b0",
+	"sequenceNumber":	{
+		"sqn":	"000000000081"
+	},
+	"authenticationManagementField":	"8000",
+	"encOpcKey":	"e8ed289deba952e4283b54e88e6183c0"
+}~> 
 ```
 
 - NRF - Get subscription info instances:
+
+AMF asking SMF's service name: nsmf-pdusession to the NRF
 ```shell
 PREFIX="open5gs"
-
-# AMF asking SMF's service name: nsmf-pdusession to the NRF
 kubectl exec -it ${PREFIX}-amf-0 -it -- \
    nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nsmf-pdusession\&target-nf-type=SMF\&requester-nf-type=AMF \
    -H':method: GET' \
    -H'user-agent: AMF'
+```
 
-# AMF asking UDM's service name: nudm-uecm  to the NRF
+Example:
+```log
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nsmf-pdusession\&target-nf-type=SMF\&requester-nf-type=AMF \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+{
+	"validityPeriod":	3600,
+	"nfInstances":	[{
+			"nfInstanceId":	"603cd366-e6b2-41ed-8469-13efca7cfe0e",
+			"nfType":	"SMF",
+			"nfStatus":	"REGISTERED",
+			"heartBeatTimer":	10,
+			"ipv4Addresses":	["10.233.110.184"],
+			"allowedNfTypes":	["AMF", "SCP"],
+			"priority":	0,
+			"capacity":	100,
+			"load":	0,
+			"nfServices":	[{
+					"serviceInstanceId":	"60495cda-e6b2-41ed-8469-13efca7cfe0e",
+					"serviceName":	"nsmf-pdusession",
+					"versions":	[{
+							"apiVersionInUri":	"v1",
+							"apiFullVersion":	"1.0.0"
+						}],
+					"scheme":	"http",
+					"nfServiceStatus":	"REGISTERED",
+					"ipEndPoints":	[{
+							"ipv4Address":	"10.233.110.184",
+							"port":	8080
+						}],
+					"allowedNfTypes":	["AMF"],
+					"priority":	0,
+					"capacity":	100,
+					"load":	0
+				}],
+			"nfProfileChangesSupportInd":	true
+		}]
+}~> 
+
+```
+
+AMF asking UDM's service name: nudm-uecm  to the NRF
+```shell
+PREFIX="open5gs"
 kubectl exec -it ${PREFIX}-amf-0 -it -- \
    nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nudm-uecm\&target-nf-type=UDM\&requester-nf-type=AMF \
    -H':method: GET' \
    -H'user-agent: AMF'
+```
 
+Example:
+```log
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nudm-uecm\&target-nf-type=UDM\&requester-nf-type=AMF \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+{
+	"validityPeriod":	3600,
+	"nfInstances":	[{
+			"nfInstanceId":	"5efd22a8-e6b2-41ed-84a7-e50a4db3e9ac",
+			"nfType":	"UDM",
+			"nfStatus":	"REGISTERED",
+			"heartBeatTimer":	10,
+			"ipv4Addresses":	["10.233.110.186"],
+			"allowedNfTypes":	["AMF", "SMF", "AUSF", "SCP"],
+			"priority":	0,
+			"capacity":	100,
+			"load":	0,
+			"nfServices":	[{
+					"serviceInstanceId":	"5efd7bae-e6b2-41ed-84a7-e50a4db3e9ac",
+					"serviceName":	"nudm-uecm",
+					"versions":	[{
+							"apiVersionInUri":	"v1",
+							"apiFullVersion":	"1.0.0"
+						}],
+					"scheme":	"http",
+					"nfServiceStatus":	"REGISTERED",
+					"ipEndPoints":	[{
+							"ipv4Address":	"10.233.110.186",
+							"port":	8080
+						}],
+					"allowedNfTypes":	["AMF"],
+					"priority":	0,
+					"capacity":	100,
+					"load":	0
+				}],
+			"nfProfileChangesSupportInd":	true
+		}]
+}
 ```
 
