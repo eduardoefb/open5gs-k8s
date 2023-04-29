@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: subscriber-creation
+  name: {{ .Values.prefix }}-subscriber-creation-job
 spec:
   template:
     metadata:

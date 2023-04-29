@@ -97,7 +97,8 @@ function deploy(){
   cd ${cwd}  
 
   # Install open5gs
-  helm install ${INSTALLATION_NAME} helm/open5gs -f values.yaml --wait --debug
+  helm install ${INSTALLATION_NAME} helm/open5gs -f values.yaml --wait --debug --timeout 6000s
+  
 }
 
 function usage(){
