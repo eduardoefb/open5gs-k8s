@@ -1,12 +1,12 @@
 prefix: open5gs
 namespace: open5gs
 registry_secret: open5gs-secret
-registry_url: registry.kube.int/open5gs
+registry_url: registry.url.com
 init_image_name: init
 open5gs_image_name: open5gs
 ueramsim_image_name: ueramsim
 dbctl_image_name: dbctl
-image_tag: 0.0.3
+image_tag: 0.0.1
 mcc: 724
 mnc: 17
 tac: 100

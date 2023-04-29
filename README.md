@@ -13,36 +13,19 @@ Before you get started, make sure you have the following:
 - Podman installation
 
 ## Image Creation
-First, navigate to the `image` directory and run the `create_image.sh` script to create the Open5GS and UERAMSIM images.
+First, build the images executing the `run.sh` with the option `build`:
 
 ```shell
-cd image
-bash create_image.sh
+cd images
+bash run.sh build
 ```
 If authentication is needed, it will ask the credentials during the script execution.
 
 
 ## Open5gs and ueramsim deployment
-In order to deploy ueramsim and open5gs, create the namespace, ex: `open5gs`  and set it as default:
+In order to deploy ueramsim and open5gs, execute the `run.sh`  script  with `deploy` option:
 ```shell
-kubectl create namespace open5gs
-kubectl config set-context --current --namespace=open5gs
-```
-
-Label the open5gs namespace with istio-injection=enabled so that Istio is used as the default:
-```shell
-kubectl label namespace open5gs istio-injection=enabled
-```
-
-Execute the script namespace_and_secrets.sh to create the necessary secrets:
-```shell
-bash namespace_and_secrets.sh
-```
-
-## Install open5gs and ueramsim
-Once the above steps are completed, you can proceed to deploy ueramsim and open5gs using the Kubernetes deployment files.
-```shell
-helm install open5gs open5gs
+bash run.sh deploy
 ```
 
 ## Configure /etc/hosts file

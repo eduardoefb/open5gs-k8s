@@ -26,7 +26,8 @@ RUN apt-get update && \
 # Copy files:
 COPY --from=builder --chown=root:root /opt/UERANSIM /opt/UERANSIM    
 COPY --chown=root:root start_gnodeb.sh /opt/start_gnodeb.sh
+COPY --chown=root:root gnodeb_liveness.sh /opt/gnodeb_liveness.sh
 COPY --chown=root:root start_ue.sh /opt/start_ue.sh
 
-RUN chmod +x /opt/start_ue.sh /opt/start_gnodeb.sh /usr/local/bin/kubectl
+RUN chmod +x /opt/start_ue.sh /opt/start_gnodeb.sh /usr/local/bin/kubectl /opt/gnodeb_liveness.sh
 
