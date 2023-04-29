@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.prefix }}-bsf
   labels:
@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-bsf
+
+  serviceName: {{ .Values.prefix }}-bsf
+  podManagementPolicy: OrderedReady
+
   template:
     metadata:
       labels:
@@ -48,6 +52,21 @@ spec:
 
         ports:
         - containerPort: 8080
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+          
+                  
       volumes:
         - name: {{ .Values.prefix }}
           configMap:

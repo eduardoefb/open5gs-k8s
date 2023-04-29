@@ -37,17 +37,26 @@ function increment_version(){
 }
 
 function build(){  
+  max_attempts=10
   increment_version ${IMAGE_TAG} > IMAGE_TAG
   export IMAGE_TAG=`cat IMAGE_TAG`
   cwd=`pwd`
   for image_dir in images/*; do
     cd ${cwd}
     cd ${image_dir}
-    if ! bash create_image.sh; then
-      echo " ${image_dir} build error!"
-      set +x
-      exit 1
-    fi
+    attempts=0
+    while :; do      
+      if ! bash create_image.sh; then
+        echo " ${image_dir} build error!"
+        if [ ${attempts} -gt ${max_attempts} ]; then 
+          set +x
+          exit 1
+        fi
+      else
+        break
+      fi
+      attempts=$((${attempts}+1))
+    done
   done
 }
 
@@ -88,7 +97,7 @@ function deploy(){
   cd ${cwd}  
 
   # Install open5gs
-  helm install ${INSTALLATION_NAME} helm/open5gs -f values.yaml
+  helm install ${INSTALLATION_NAME} helm/open5gs -f values.yaml --wait --debug
 }
 
 function usage(){
@@ -126,7 +135,7 @@ podman login ${REGISTRY_URL}
 
 ## Check version:
 if [ ! -f IMAGE_TAG ]; then
-  echo "0.0.1" > IMAGE_TAG
+  echo "0.0.0" > IMAGE_TAG
 fi
 
 export IMAGE_TAG=`cat IMAGE_TAG`
@@ -144,4 +153,3 @@ else
   usage
 fi
 
-cd ${cwd}

@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.prefix }}-amf
   labels:
@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-amf
+
+  serviceName: {{ .Values.prefix }}-amf
+  podManagementPolicy: OrderedReady
+
   template:
     metadata:
       labels:
@@ -47,6 +51,22 @@ spec:
         - containerPort: 38412
           protocol: SCTP
           name: sctp
+
+        readinessProbe:
+          exec:
+            command:
+              - "/opt/amf_probe.sh"
+          initialDelaySeconds: 2
+          periodSeconds: 5 
+
+        livenessProbe:
+          exec:
+            command:
+              - "/opt/amf_probe.sh"           
+          initialDelaySeconds: 15
+          periodSeconds: 5   
+          failureThreshold: 3     
+          
       volumes:
         - name: {{ .Values.prefix }}
           configMap:

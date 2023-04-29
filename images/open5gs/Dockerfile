@@ -47,6 +47,7 @@ COPY install_npm.sh /opt/install_npm
 COPY post_install_npm.sh /opt/post_install_npm
 COPY start_mongodb.sh /opt/start_mongodb.sh
 COPY start_app.sh /opt/start_app.sh
+COPY amf_probe.sh /opt/amf_probe.sh
 
 # Install npm and Set ownership and permissions of Open5GS directories and files:
 RUN cd /opt/ && \
@@ -56,4 +57,5 @@ RUN cd /opt/ && \
     chown -R open5gs:open5gs /etc/mongodb.conf && \
     chown -R open5gs:open5gs /opt/open5gs* && \
     chmod +x /opt/start_mongodb.sh && \
+    chmod +x /opt/amf_probe.sh && \
     chmod +x /opt/start_app.sh

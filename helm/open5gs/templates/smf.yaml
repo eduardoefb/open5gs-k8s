@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.prefix }}-smf
   labels:
@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-smf
+
+  serviceName: {{ .Values.prefix }}-smf
+  podManagementPolicy: OrderedReady
+
   template:
     metadata:
       labels:

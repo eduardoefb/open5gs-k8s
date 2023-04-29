@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.prefix }}-mongodb
   labels:
@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-mongodb
+  
+  serviceName: {{ .Values.prefix }}-mongodb
+  podManagementPolicy: OrderedReady
+  
   template:
     metadata:
       labels:
@@ -27,17 +31,25 @@ spec:
         image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}   
         command: ["/bin/bash","-c"]
         args: ["/opt/start_mongodb.sh"]
-        #volumeMounts:
-        #    - name: open5gs
-        #      mountPath: /etc/open5gs
+
         ports:
         - containerPort: 3000
         - containerPort: 27017
+
+
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3          
         
-      #volumes:
-      #  - name: {{ .Values.prefix }}
-      #    configMap:
-      #      name: {{ .Values.prefix }}
 ---
 apiVersion: v1
 kind: Service

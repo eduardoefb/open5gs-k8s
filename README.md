@@ -10,7 +10,8 @@ Before you get started, make sure you have the following:
 
 - Kubernetes cluster (version 1.16 or later) and istio
 - `kubectl` command line tool
-- Podman installation
+- A valid image registry 
+- Podman and buildah installation
 
 ## Image Creation
 First, build the images executing the `run.sh` with the option `build`:

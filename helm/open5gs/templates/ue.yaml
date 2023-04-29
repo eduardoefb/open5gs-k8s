@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Values.prefix }}-ue
   labels:
@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-ue
+
+  serviceName: {{ .Values.prefix }}-ue
+  podManagementPolicy: OrderedReady
+
   template:
     metadata:
       labels:
@@ -52,6 +56,17 @@ spec:
         - containerPort: 2152
         - containerPort: 8805
         - containerPort: 9090
+        readinessProbe:
+          exec:
+            command:
+              - "ping" 
+              - "-c" 
+              - "1" 
+              - "{{ .Values.upf_ip }}"
+              
+          initialDelaySeconds: 2
+          periodSeconds: 5
+
         livenessProbe:
           exec:
             command:
@@ -60,8 +75,9 @@ spec:
               - "1" 
               - "{{ .Values.upf_ip }}"
               
-          initialDelaySeconds: 10
+          initialDelaySeconds: 15
           periodSeconds: 5
+          failureThreshold: 3
         
       volumes:
         - name: {{ .Values.prefix }}
