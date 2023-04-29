@@ -12,7 +12,7 @@ export MCC="724"
 export MNC="17"
 export TAC="100"
 export ISTIO_DOMAIN="${NAMESPACE}.int"
-export INSTALLATION_NAME="5g"
+export INSTALLATION_NAME="open5g"
 
 function increment_version(){
   version=${1}
@@ -98,7 +98,7 @@ function deploy(){
 
   # Install open5gs
   helm install ${INSTALLATION_NAME} helm/open5gs -f values.yaml --wait --debug --timeout 6000s
-  
+
 }
 
 function usage(){
