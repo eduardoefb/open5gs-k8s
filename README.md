@@ -92,48 +92,87 @@ traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
 ~>
 ```
 
-To be able to connect to the webui, you must add the istio's ip to the /etc/hosts with the virtualservices fqdns:
+To connect to the web UI, you need to add the IP address of Istio to the /etc/hosts file along with the fully qualified domain names (FQDNs) of the virtual services.
 
 ```shell
 kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 kubectl get virtualservice
 ```
 
-## Example http2 verifications
-
-
+Alternatively, you can use the following commands to generate the /etc/hosts entry (replace the "open5gs" namespace with your own namespace):
 ```shell
-
-## UDM:
-nghttp -v http://udm.open5gs.int/nudm-sdm/v2/imsi-724170000000001/am-data  -H':method: GET' -H'user-agent: AMF'
-curl -v http://udm.open5gs.int/nudm-sdm/v2/imsi-724170000000001/am-data  -H':method: GET' -H'user-agent: AMF'
-## UDM Via scp:
-nghttp -v http://scp.open5gs.int/nudm-sdm/v2/imsi-724170000000001/am-data  \
-   -H "3gpp-sbi-target-apiroot: http://open5gs-udm:8080" \
-   -H':method: GET' -H'user-agent: AMF'
-
-curl -v http://scp.open5gs.int/nudm-sdm/v2/imsi-724170000000001/am-data  \
-   -H "3gpp-sbi-target-apiroot: http://open5gs-udm:8080" \
-   -H':method: GET' -H'user-agent: AMF'
-
-
-## UDR:
-nghttp -v http://udr.open5gs.int/nudr-dr/v1/subscription-data/imsi-724170000000001/authentication-data/authentication-subscription  \
--H':method: GET' -H'user-agent: UDM'
-
-## UDR Via SCP:
-nghttp -v http://scp.open5gs.int/nudr-dr/v1/subscription-data/imsi-724170000000001/authentication-data/authentication-subscription  \
--H':method: GET' -H'user-agent: UDM' \
--H "3gpp-sbi-target-apiroot: http://open5gs-udr:8080"
-
-
-### Check NRF:
-nghttp -v 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?service-names=nsmf-pdusession&target-nf-type=SMF&requester-nf-type=AMF'  \
--H':method: GET' -H'user-agent: AMF'
-
-
-nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDR&requester-nf-type=PCF'
-nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDM&requester-nf-type=AMF'
-nghttp 'http://nrf.open5gs.int/nnrf-disc/v1/nf-instances?target-nf-type=UDRrequester-nf-type=UDM'
+ingress_ip=`kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'`
+for i in `kubectl -n open5gs get virtualservice | grep -v NAME | awk '{print $1}'`; do
+    hname=`kubectl -n open5gs get virtualservice ${i} -o jsonpath='{.spec.hosts[0]}'`
+    echo "${ingress_ip} ${hname}"   
+done
 
 ```
+
+## Example http2 verifications
+The follwing command can be executed inside any open5gs pod (amf/ausf/pcf/nrf... etc):
+
+- UDM: Show am-data from subscriber:
+```shell
+PREFIX="open5gs"
+SUPI="724170000000001"
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-udm:8080/nudm-sdm/v2/imsi-${SUPI}/am-data  \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+
+```
+
+- UDM - Show am-data from subscriber via SCP:
+```shell
+PREFIX="open5gs"
+SUPI="724170000000001"
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-scp:8080/nudm-sdm/v2/imsi-${SUPI}/am-data  \
+   -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udm:8080" \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+```
+
+
+- UDR - Get subscription data:
+```shell
+PREFIX="open5gs"
+SUPI="724170000000001"
+kubectl exec -it ${PREFIX}-udm-0 -it -- \
+   nghttp http://${PREFIX}-udr:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
+   -H':method: GET' \
+   -H'user-agent: UDM'
+
+```
+
+- UDR - Get subscription data scp:
+```shell
+PREFIX="open5gs"
+SUPI="724170000000001"
+kubectl exec -it ${PREFIX}-udm-0 -it -- \
+   nghttp http://${PREFIX}-scp:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
+   -H':method: GET' \
+   -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udr:8080" \
+   -H'user-agent: UDM'
+   
+```
+
+- NRF - Get subscription info instances:
+```shell
+PREFIX="open5gs"
+
+# AMF asking SMF's service name: nsmf-pdusession to the NRF
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nsmf-pdusession\&target-nf-type=SMF\&requester-nf-type=AMF \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+
+# AMF asking UDM's service name: nudm-uecm  to the NRF
+kubectl exec -it ${PREFIX}-amf-0 -it -- \
+   nghttp http://${PREFIX}-nrf:8080/nnrf-disc/v1/nf-instances?service-names=nudm-uecm\&target-nf-type=UDM\&requester-nf-type=AMF \
+   -H':method: GET' \
+   -H'user-agent: AMF'
+
+```
+
