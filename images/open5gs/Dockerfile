@@ -58,4 +58,5 @@ RUN cd /opt/ && \
     chown -R open5gs:open5gs /opt/open5gs* && \
     chmod +x /opt/start_mongodb.sh && \
     chmod +x /opt/amf_probe.sh && \
-    chmod +x /opt/start_app.sh
+    chmod +x /opt/start_app.sh && \
+    rm -f /etc/open5gs/*.yaml
