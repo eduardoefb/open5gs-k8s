@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Values.prefix }}-ue
 spec:
-  replicas: 1
+  replicas: {{ len .Values.subscribers }}
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-ue

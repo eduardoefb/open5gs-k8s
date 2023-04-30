@@ -7,7 +7,8 @@ k8s=`host kubernetes  | awk '{print $NF}'`
 gw=`ip route | grep default | awk '{print $3}'`
 
 # Replace the ip address in the config file:
-sed "s|#GNODEB_IP#|${gnodeb_ip}|g" /opt/open5gs/config/subscriber.yaml  > /etc/subscriber.yaml
+#sed "s|#GNODEB_IP#|${gnodeb_ip}|g" /opt/open5gs/config/subscriber.yaml  > /etc/subscriber.yaml
+python3 /opt/subscriber_config.py ${gnodeb_ip}
 
 # Start ue
 cd /opt/UERANSIM

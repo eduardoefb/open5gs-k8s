@@ -1,0 +1,2318 @@
+---
+# Source: open5gs/templates/amf-configmap.yaml
+apiVersion: v1
+data:
+  amf.yaml: |
+    logger:
+        file: /var/log/open5gs/amf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/amf.key
+          cert: /etc/open5gs/tls/amf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/amf.key
+          cert: /etc/open5gs/tls/amf.crt
+
+    amf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+        ngap:
+          - addr: 0.0.0.0
+        metrics:
+            addr: 0.0.0.0
+            port: 9090
+        guami:
+          - plmn_id:
+              mcc: 724
+              mnc: 17
+            amf_id:
+              region: 2
+              set: 1
+        tai:
+          - plmn_id:
+              mcc: 724
+              mnc: 17
+            tac: 100
+        plmn_support:
+          - plmn_id:
+              mcc: 724
+              mnc: 17
+            s_nssai:
+              - sst: 1
+        security:
+            integrity_order : [ NIA2, NIA1, NIA0 ]
+            ciphering_order : [ NEA0, NEA1, NEA2 ]
+        network_name:
+            full: Open5GS
+        amf_name: open5gs-amf0
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    usrsctp:
+    time:
+      t3512:
+        value: 540     # 9 mintues * 60 = 540 seconds
+
+kind: ConfigMap
+metadata:
+  name: open5gs-amf
+---
+# Source: open5gs/templates/ausf-configmap.yaml
+apiVersion: v1
+data:
+  ausf.yaml: |
+    logger:
+        file: /var/log/open5gs/ausf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/ausf.key
+          cert: /etc/open5gs/tls/ausf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/ausf.key
+          cert: /etc/open5gs/tls/ausf.crt
+
+
+    ausf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-ausf
+---
+# Source: open5gs/templates/bsf-configmap.yaml
+apiVersion: v1
+data:
+  bsf.yaml: |
+    logger:
+        file: /var/log/open5gs/bsf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/bsf.key
+          cert: /etc/open5gs/tls/bsf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/bsf.key
+          cert: /etc/open5gs/tls/bsf.crt
+    bsf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+
+kind: ConfigMap
+metadata:
+  name: open5gs-bsf
+---
+# Source: open5gs/templates/gnodeb_config.yaml
+apiVersion: v1
+data:
+  gnodeb.yaml: |
+    mcc: '724'
+    mnc: '17'
+
+    nci: '0x000000010'
+    idLength: 32
+    tac: '100'
+
+    linkIp: 0.0.0.0
+    ngapIp: 0.0.0.0
+    gtpIp: 0.0.0.0
+
+    # List of AMF address information
+    amfConfigs:
+      - address: open5gs-amf  
+        port: 38412
+
+    # List of supported S-NSSAIs by this gNB
+    slices:
+      - sst: 1
+
+    # Indicates whether or not SCTP stream number errors should be ignored.
+    ignoreStreamIds: true
+kind: ConfigMap
+metadata:
+  name: open5gs-gnodeb
+---
+# Source: open5gs/templates/nrf_config.yaml
+apiVersion: v1
+data:
+  nrf.yaml: |
+    db_uri: mongodb://open5gs-mongodb/open5gs
+    logger:
+        file: /var/log/open5gs/nrf.log
+
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/nrf.key
+          cert: /etc/open5gs/tls/nrf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/nrf.key
+          cert: /etc/open5gs/tls/nrf.crt
+
+    nrf:
+        sbi:
+          addr:
+            - 0.0.0.0
+          port: 8080
+
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-nrf
+---
+# Source: open5gs/templates/nssf_config.yaml
+apiVersion: v1
+data:
+  nssf.yaml: |
+    logger:
+        file: /var/log/open5gs/nssf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/nssf.key
+          cert: /etc/open5gs/tls/nssf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/nssf.key
+          cert: /etc/open5gs/tls/nssf.crt
+
+
+    nssf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+        nsi:
+          - addr: open5gs-nrf
+            port: 8080
+            s_nssai:
+              sst: 1
+
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-nssf
+---
+# Source: open5gs/templates/pcf-confimgap.yaml
+apiVersion: v1
+data:
+  pcf.yaml: |
+    db_uri: mongodb://open5gs-mongodb/open5gs
+    logger:
+        file: /var/log/open5gs/pcf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/pcf.key
+          cert: /etc/open5gs/tls/pcf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/pcf.key
+          cert: /etc/open5gs/tls/pcf.crt
+
+
+    pcf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+        metrics:
+          - addr: 0.0.0.0
+            port: 9090
+
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-pcf
+---
+# Source: open5gs/templates/scp-configmap.yaml
+apiVersion: v1
+data:
+  scp.yaml: |
+    db_uri: mongodb://open5gs-mongodb/open5gs
+
+    logger:
+        file: /var/log/open5gs/scp.log
+
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/scp.key
+          cert: /etc/open5gs/tls/scp.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/scp.key
+          cert: /etc/open5gs/tls/scp.crt
+
+    scp:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+
+    nrf:
+        sbi:
+          - addr:
+              - open5gs-nrf
+            port: 8080
+
+    parameter:
+
+    max:
+
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-scp
+---
+# Source: open5gs/templates/smf-configmap.yaml
+apiVersion: v1
+data:
+  smf.yaml: |
+    logger:
+        file: /var/log/open5gs/smf.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/smf.key
+          cert: /etc/open5gs/tls/smf.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/smf.key
+          cert: /etc/open5gs/tls/smf.crt
+    smf:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+        pfcp:
+          - addr: 0.0.0.0
+        gtpc:
+          - addr:  0.0.0.0
+        gtpu:
+          - addr:  0.0.0.0
+        subnet:
+          - addr: 10.45.0.1/16
+            dnn: internet
+        dns:
+          - 8.8.8.8
+          - 8.8.4.4
+          
+        mtu: 1400
+        freeDiameter: /etc/freeDiameter/smf.conf
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    upf:
+        pfcp:
+          - addr: open5gs-upf
+            dnn: [internet]
+    parameter:
+    max:
+    pool:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-smf
+---
+# Source: open5gs/templates/subscriber-configmap.yaml
+apiVersion: v1
+data:
+  subscribers.yaml: |
+    - amf: "8000"
+      id: "1"
+      imei: "356938035643803"
+      imeisv: "4370816125816151"
+      imsi: "724170000000001"
+      key: 465B5CE8B199B49FAA5F0A2EE238A6B0
+      msisdn: "5521998110001"
+      name: ue01
+      opc: E8ED289DEBA952E4283B54E88E6183C0
+      slice:
+        dl_ambr: 1000000000
+        sst: 1
+        ul_ambr: 1000000000
+    - amf: "8000"
+      id: "2"
+      imei: "356938035643814"
+      imeisv: "4370816125816177"
+      imsi: "724170000000002"
+      key: 475B5CE8B199B49FAA5F0A2EE238A6B1
+      msisdn: "5521998110002"
+      name: ue02
+      opc: E6ED289DEBA952E4283B54E88E6183C2
+      slice:
+        dl_ambr: 1000000000
+        sst: 1
+        ul_ambr: 1000000000
+    - amf: "8000"
+      id: "3"
+      imei: "356938035633811"
+      imeisv: "4370816115896177"
+      imsi: "724170000000003"
+      key: 475B5CE8B199B49FAA5F0B1EE238A6B1
+      msisdn: "5521998110003"
+      name: ue03
+      opc: E6ED289DEBA952E4283B54C98E6183C2
+      slice:
+        dl_ambr: 1000000000
+        sst: 1
+        ul_ambr: 1000000000
+
+
+  subscriber.yaml: |
+    # IMSI number of the subscriber. IMSI = [MCC|MNC|MSISDN] (In total 15 digits)
+    supi: 'imsi-724170000000001'
+
+    # Mobile Country Code value of HPLMN
+    mcc: '724'
+
+    # Mobile Network Code value of HPLMN (2 or 3 digits)
+    mnc: '17'
+
+    # Permanent subscription key
+    key: '465B5CE8B199B49FAA5F0A2EE238A6B0'
+
+    # Operator code (OP or OPC) of the UE
+    op: 'E8ED289DEBA952E4283B54E88E6183C0'
+
+    # This value specifies the OP type and it can be either 'OP' or 'OPC'
+    opType: 'OPC'
+
+    # Authentication Management Field (AMF) value
+    amf: '8000'
+
+    # IMEI number of the device. It is used if no SUPI is provided
+    imei: '356938035643803'
+
+    # IMEISV number of the device. It is used if no SUPI and IMEI is provided
+    imeiSv: '4370816125816151'
+
+    # List of gNB IP addresses for Radio Link Simulation
+    gnbSearchList:
+      - "#GNODEB_IP#"
+
+    # UAC Access Identities Configuration
+    uacAic:
+      mps: false
+      mcs: false
+
+    # UAC Access Control Class
+    uacAcc:
+      normalClass: 0
+      class11: false
+      class12: false
+      class13: false
+      class14: false
+      class15: false
+
+    # Initial PDU sessions to be established
+    sessions:
+      - type: 'IPv4'
+        apn: 'internet'
+        slice:
+          sst: 1
+
+    # Configured NSSAI for this UE by HPLMN
+    configured-nssai:
+      - sst: 1
+
+    # Default Configured NSSAI for this UE
+    default-nssai:
+      - sst: 1
+        sd: 1
+
+    # Supported encryption algorithms by this UE
+    integrity:
+      IA1: true
+      IA2: true
+      IA3: true
+
+    # Supported integrity algorithms by this UE
+    ciphering:
+      EA1: true
+      EA2: true
+      EA3: true
+
+    # Integrity protection maximum data rate for user plane
+    integrityMaxRate:
+      uplink: 'full'
+      downlink: 'full'
+
+kind: ConfigMap
+metadata:
+  name: open5gs-subscriber
+---
+# Source: open5gs/templates/udm-configmap.yaml
+apiVersion: v1
+data:
+  udm.yaml: |
+    logger:
+        file: /var/log/open5gs/udm.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/udm.key
+          cert: /etc/open5gs/tls/udm.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/udm.key
+          cert: /etc/open5gs/tls/udm.crt
+    udm:
+        hnet:
+          - id: 1
+            scheme: 1
+            key: /etc/open5gs/hnet/curve25519-1.key
+          - id: 2
+            scheme: 2
+            key: /etc/open5gs/hnet/secp256r1-2.key
+          - id: 3
+            scheme: 1
+            key: /etc/open5gs/hnet/curve25519-3.key
+          - id: 4
+            scheme: 2
+            key: /etc/open5gs/hnet/secp256r1-4.key
+          - id: 5
+            scheme: 1
+            key: /etc/open5gs/hnet/curve25519-5.key
+          - id: 6
+            scheme: 2
+            key: /etc/open5gs/hnet/secp256r1-6.key
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-udm
+---
+# Source: open5gs/templates/udr-configmap.yaml
+apiVersion: v1
+data:
+  udr.yaml: |
+    db_uri: mongodb://open5gs-mongodb/open5gs
+    logger:
+        file: /var/log/open5gs/udr.log
+    sbi:
+        server:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/udr.key
+          cert: /etc/open5gs/tls/udr.crt
+        client:
+          no_tls: true
+          cacert: /etc/open5gs/tls/ca.crt
+          key: /etc/open5gs/tls/udr.key
+          cert: /etc/open5gs/tls/udr.crt
+
+    udr:
+        sbi:
+          - addr: 0.0.0.0
+            port: 8080
+    scp:
+        sbi:
+          - addr: open5gs-scp
+            port: 8080
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-udr
+---
+# Source: open5gs/templates/upf-configmap.yaml
+apiVersion: v1
+data:
+  upf.yaml: |
+    logger:
+        file: /var/log/open5gs/upf.log
+    upf:
+        pfcp:
+          - addr: 0.0.0.0
+        gtpu:
+          - addr: 0.0.0.0
+        subnet:
+          - addr: 10.45.0.1/16
+            dnn: internet
+            dev: ogstun
+        metrics:
+          - addr: 0.0.0.0
+            port: 9090
+    smf:
+    parameter:
+    max:
+    time:
+kind: ConfigMap
+metadata:
+  name: open5gs-upf
+---
+# Source: open5gs/templates/role-rolebinding.yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: open5gs
+  name: pod-list-permission
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list", "get"]
+---
+# Source: open5gs/templates/role-rolebinding.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pod-list-permission-binding
+  namespace: open5gs
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: open5gs
+roleRef:
+  kind: Role
+  name: pod-list-permission
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: open5gs/templates/ausf-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-ausf
+  name: open5gs-ausf
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080  
+  selector:
+    app: open5gs-ausf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/bsf-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-bsf
+  name: open5gs-bsf
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080  
+  selector:
+    app: open5gs-bsf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/mongodb-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-mongodb
+  name: open5gs-mongodb
+
+spec:
+  ports:
+  - port: 3000
+    name: sbi
+    protocol: TCP
+    targetPort: 3000
+  - port: 27017
+    name: mongodb
+    protocol: TCP
+    targetPort: 27017    
+  selector:
+    app: open5gs-mongodb
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/nrf-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-nrf
+  name: open5gs-nrf
+
+spec:
+  ports:
+  - port: 8080
+    name: http2 
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: open5gs-nrf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/nssf.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-nssf
+  name: open5gs-nssf
+spec:
+  ports:
+  - port: 8080
+    name: sbi
+    protocol: TCP
+    targetPort: 8080  
+  selector:
+    app: open5gs-nssf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/pcf-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-pcf
+  name: open5gs-pcf
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080  
+  - port: 9090
+    name: metrics
+    protocol: TCP
+    targetPort: 9090     
+  selector:
+    app: open5gs-pcf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/scp-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-scp
+  name: open5gs-scp
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: open5gs-scp
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/smf-deploy.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-smf
+  name: open5gs-smf
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  - port: 8805
+    name: udp1
+    protocol: UDP
+    targetPort: 8805    
+  - port: 2123
+    name: udp2
+    protocol: UDP
+    targetPort: 2123    
+  - port: 2152
+    name: udp3
+    protocol: UDP
+    targetPort: 2152     
+  selector:
+    app: open5gs-smf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/udm-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-udm
+  name: open5gs-udm
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080  
+  selector:
+    app: open5gs-udm
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/udr-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-udr
+  name: open5gs-udr
+
+spec:
+  ports:
+  - port: 8080
+    name: http2
+    protocol: TCP
+    targetPort: 8080
+  - port: 27017
+    name: mongodb
+    protocol: TCP
+    targetPort: 27017    
+  selector:
+    app: open5gs-udr
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/upf-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: open5gs-upf
+  name: open5gs-upf
+
+spec:
+  ports:
+  - port: 2152    
+    protocol: UDP
+    name: upf1
+    targetPort: 2152
+  - port: 8805
+    protocol: UDP
+    targetPort: 8805
+    name: upf2
+  - port: 9090
+    protocol: TCP
+    targetPort: 9090
+    name: upf3   
+  selector:
+    app: open5gs-upf
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: open5gs/templates/amf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-amf
+  labels:
+    app: open5gs-amf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-amf
+
+  serviceName: open5gs-amf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-amf
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh"  
+        env: 
+          - name: PREFIX
+            value: open5gs                 
+      containers:
+      - name: open5gs-amf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: amf
+          - name: PREFIX
+            value: open5gs            
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 38412
+          protocol: SCTP
+          name: sctp
+
+        readinessProbe:
+          exec:
+            command:
+              - "/opt/amf_probe.sh"
+          initialDelaySeconds: 2
+          periodSeconds: 5 
+
+        livenessProbe:
+          exec:
+            command:
+              - "/opt/amf_probe.sh"           
+          initialDelaySeconds: 15
+          periodSeconds: 5   
+          failureThreshold: 3     
+          
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-amf
+---
+# Source: open5gs/templates/ausf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-ausf
+  labels:
+    app: open5gs-ausf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-ausf
+
+  serviceName: open5gs-ausf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-ausf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry 
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh" 
+        env: 
+          - name: PREFIX
+            value: open5gs                   
+      containers:
+      - name: open5gs-ausf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: ausf  
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+
+        ports:
+        - containerPort: 8080 
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+          
+                  
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-ausf
+---
+# Source: open5gs/templates/bsf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-bsf
+  labels:
+    app: open5gs-bsf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-bsf
+
+  serviceName: open5gs-bsf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-bsf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh"  
+        env: 
+          - name: PREFIX
+            value: open5gs             
+      containers:
+      - name: open5gs-smf
+        image: registry.kube.int/open5gs/open5gs:0.0.1  
+        env:
+          - name: NETYPE
+            value: bsf 
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: open5gs-hnet
+              mountPath: /etc/open5gs/hnet
+
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+          
+                  
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-bsf
+        - name: open5gs-hnet
+          secret:
+            secretName: hnet
+---
+# Source: open5gs/templates/gnodeb.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-gnodeb
+  labels:
+    app: open5gs-gnodeb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-gnodeb
+
+  serviceName: open5gs-gnodeb
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-gnodeb
+      annotations:
+        sidecar.istio.io/inject: "false"        
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0          
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-amf
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_amf.sh" 
+        env: 
+          - name: PREFIX
+            value: open5gs                    
+      containers:
+      - name: open5gs-gnodeb
+        image: registry.kube.int/open5gs/ueramsim:0.0.1 
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]              
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]   
+        env:
+          - name: NETYPE
+            value: gnodeb   
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_gnodeb.sh"                 
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: dev-tun
+              mountPath: /dev/net/tun              
+        ports:
+        - containerPort: 2152
+        - containerPort: 4497
+        - containerPort: 43075
+  
+        readinessProbe:
+          exec:
+            command:
+              - "/opt/gnodeb_liveness.sh"               
+          initialDelaySeconds: 2
+          periodSeconds: 5 
+
+        livenessProbe:
+          exec:
+            command:
+              - "/opt/gnodeb_liveness.sh"               
+          initialDelaySeconds: 15
+          periodSeconds: 5   
+          failureThreshold: 3     
+        
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-gnodeb
+        - name: dev-tun            
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+---
+# Source: open5gs/templates/mongodb-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-mongodb
+  labels:
+    app: open5gs-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-mongodb
+  
+  serviceName: open5gs-mongodb
+  podManagementPolicy: OrderedReady
+  
+  template:
+    metadata:
+      labels:
+        app: open5gs-mongodb
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      containers:
+      - name: open5gs-mongodb
+        image: registry.kube.int/open5gs/open5gs:0.0.1   
+        command: ["/bin/bash","-c"]
+        args: ["/opt/start_mongodb.sh"]
+
+        ports:
+        - containerPort: 3000
+        - containerPort: 27017
+
+
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3
+---
+# Source: open5gs/templates/nrf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-nrf
+  labels:
+    app: open5gs-nrf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-nrf
+
+  serviceName: open5gs-nrf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-nrf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1
+        command:
+           - "/opt/wait_scp_service.sh"  
+        env: 
+          - name: PREFIX
+            value: open5gs                       
+      containers:
+      - name: open5gs-nrf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: nrf 
+          - name: PREFIX
+            value: open5gs                  
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+
+          
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-nrf
+---
+# Source: open5gs/templates/nssf.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-nssf
+  labels:
+    app: open5gs-nssf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-nssf
+
+  serviceName: open5gs-nssf
+  podManagementPolicy: OrderedReady
+  
+  template:
+    metadata:
+      labels:
+        app: open5gs-nssf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh" 
+        env: 
+          - name: PREFIX
+            value: open5gs               
+      containers:
+      - name: open5gs-nssf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: nssf   
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+
+        ports:
+        - containerPort: 8080
+
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+          
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-nssf
+---
+# Source: open5gs/templates/pcf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-pcf
+  labels:
+    app: open5gs-pcf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-pcf
+
+  serviceName: open5gs-pcf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-pcf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        env:
+          - name: NETYPE
+            value: pcf  
+          - name: PREFIX
+            value: open5gs          
+        command:
+           - "/opt/wait_scp.sh" 
+        env: 
+          - name: PREFIX
+            value: open5gs              
+      - name: wait-mongodb
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_mongodb.sh"      
+        env:
+          - name: NETYPE
+            value: pcf  
+          - name: PREFIX
+            value: open5gs                        
+      containers:
+      - name: open5gs-pcf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: pcf  
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+                  
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-pcf
+---
+# Source: open5gs/templates/scp-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-scp
+  labels:
+    app: open5gs-scp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-scp
+
+  serviceName: open5gs-scp
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-scp
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-nrf
+        image: registry.kube.int/open5gs/init:0.0.1
+        command:
+           - "/opt/wait_nrf.sh"    
+        env: 
+          - name: PREFIX
+            value: open5gs                
+      containers:
+      - name: open5gs-scp
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: scp   
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3  
+          
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-scp
+---
+# Source: open5gs/templates/smf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-smf
+  labels:
+    app: open5gs-smf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-smf
+
+  serviceName: open5gs-smf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-smf
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh"
+        env: 
+          - name: PREFIX
+            value: open5gs             
+      - name: wait-upf
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_upf.sh"   
+        env: 
+          - name: PREFIX
+            value: open5gs           
+        env: 
+          - name: PREFIX
+            value: open5gs                          
+      containers:
+      - name: open5gs-smf
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: smf
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+        - containerPort: 8805
+        - containerPort: 2123
+        - containerPort: 2152
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-smf
+---
+# Source: open5gs/templates/udm-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-udm
+  labels:
+    app: open5gs-udm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-udm
+
+  serviceName: open5gs-udm
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-udm
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_scp.sh"  
+        env: 
+          - name: PREFIX
+            value: open5gs             
+      containers:
+      - name: open5gs-smf
+        image: registry.kube.int/open5gs/open5gs:0.0.1  
+        env:
+          - name: NETYPE
+            value: udm 
+          - name: PREFIX
+            value: open5gs               
+        command:
+           - "/opt/start_app.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: open5gs-hnet
+              mountPath: /etc/open5gs/hnet
+
+        ports:
+        - containerPort: 8080
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10   
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3          
+          
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-udm
+        - name: open5gs-hnet
+          secret:
+            secretName: hnet
+---
+# Source: open5gs/templates/udr-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-udr
+  labels:
+    app: open5gs-udr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-udr
+
+  serviceName: open5gs-udr
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-udr
+      annotations:
+        sidecar.istio.io/inject: "true"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-scp
+        image: registry.kube.int/open5gs/init:0.0.1 
+        command:
+           - "/opt/wait_scp.sh"   
+        env: 
+          - name: PREFIX
+            value: open5gs               
+      - name: wait-mongodb
+        image: registry.kube.int/open5gs/init:0.0.1
+        command:
+           - "/opt/wait_mongodb.sh"   
+        env: 
+          - name: PREFIX
+            value: open5gs                                 
+      containers:
+      - name: open5gs-udr
+        image: registry.kube.int/open5gs/open5gs:0.0.1
+        env:
+          - name: NETYPE
+            value: udr  
+          - name: PREFIX
+            value: open5gs                
+        command:
+           - "/opt/start_app.sh"                 
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+        ports:
+        - containerPort: 8080
+        - containerPort: 27017
+        
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-udr
+---
+# Source: open5gs/templates/ue-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-ue
+  labels:
+    app: open5gs-ue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-ue
+
+  serviceName: open5gs-ue
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-ue
+      annotations:
+        sidecar.istio.io/inject: "false"        
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0          
+      imagePullSecrets:
+      - name: registry
+      initContainers:
+      - name: wait-gnodeb
+        image: registry.kube.int/open5gs/init:0.0.1  
+        command:
+           - "/opt/wait_gnodeb.sh"  
+        env: 
+          - name: PREFIX
+            value: open5gs                   
+      containers:
+      - name: open5gs-ue
+        image: registry.kube.int/open5gs/ueramsim:0.0.1 
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]
+        env:
+          - name: NETYPE
+            value: ue   
+          - name: PREFIX
+            value: open5gs  
+        command:
+          - "/opt/start_ue.sh"
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: dev-tun
+              mountPath: /dev/net/tun              
+        ports:
+        - containerPort: 2152
+        - containerPort: 8805
+        - containerPort: 9090
+        readinessProbe:
+          exec:
+            command:
+              - "ping" 
+              - "-c" 
+              - "1" 
+              - "10.45.0.1"
+              
+          initialDelaySeconds: 2
+          periodSeconds: 5
+
+        livenessProbe:
+          exec:
+            command:
+              - "ping" 
+              - "-c" 
+              - "1" 
+              - "10.45.0.1"
+              
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          failureThreshold: 3
+        
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-subscriber
+        - name: dev-tun            
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+---
+# Source: open5gs/templates/upf-deploy.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-upf
+  labels:
+    app: open5gs-upf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open5gs-upf
+
+  serviceName: open5gs-upf
+  podManagementPolicy: OrderedReady
+
+  template:
+    metadata:
+      labels:
+        app: open5gs-upf
+      annotations:
+        sidecar.istio.io/inject: "true"      
+
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0          
+      imagePullSecrets:
+      - name: registry
+      containers:
+      - name: open5gs-upf
+        image: registry.kube.int/open5gs/open5gs:0.0.1              
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["NET_ADMIN", "SYS_TIME"]   
+        env:
+          - name: DEBUG
+            value: upf          
+          - name: NETYPE
+            value: upf  
+          - name: PREFIX
+            value: open5gs                
+        command:
+           - "/opt/start_app.sh"                 
+        volumeMounts:
+            - name: open5gs
+              mountPath: /opt/open5gs/config/
+            - name: dev-tun
+              mountPath: /dev/net/tun
+                   
+        ports:
+        - containerPort: 2152
+        - containerPort: 8805
+        - containerPort: 9090
+        
+      volumes:
+        - name: open5gs
+          configMap:
+            name: open5gs-upf
+        - name: dev-tun            
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+---
+# Source: open5gs/templates/subscriber-creation-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: open5gs-subscriber-creation-job
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"  
+    spec:
+      imagePullSecrets:
+      - name: registry
+      
+      #initContainers: 
+      #- name: wait-mongodb
+      #  image: registry.kube.int/open5gs/init:0.0.1  
+      #  command:
+      #     - "/opt/wait_mongodb.sh" 
+      #  env: 
+      #    - name: PREFIX
+      #      value: open5gs              
+
+      containers:
+      - name: dbctl
+        image: registry.kube.int/open5gs/dbctl:0.0.1
+        env:
+          - name: PREFIX
+            value: open5gs          
+        command: ["sleep", "1d"]
+        #command: ["/home/open5gs/subscriber_create.sh"]
+        volumeMounts:
+        - name: subscriber-data
+          mountPath: /opt/open5gs/        
+      restartPolicy: Never
+      securityContext:
+         runAsUser: 1024
+         runAsGroup: 1024
+      volumes:
+      - name: subscriber-data
+        configMap:
+          name: open5gs-subscriber
+  backoffLimit: 10
+---
+# Source: open5gs/templates/ausf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-ausf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - ausf.open5gs.int
+---
+# Source: open5gs/templates/bsf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-bsf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - bsf.open5gs.int
+---
+# Source: open5gs/templates/mongodb-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-mongodb-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - db.open5gs.int
+---
+# Source: open5gs/templates/nrf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-nrf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - nrf.open5gs.int
+---
+# Source: open5gs/templates/nssf.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-nssf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - nss.open5gs.int
+---
+# Source: open5gs/templates/pcf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-pcf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - pcf.open5gs.int
+---
+# Source: open5gs/templates/scp-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-scp-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - scp.open5gs.int
+---
+# Source: open5gs/templates/smf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-smf-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - smf.open5gs.int
+---
+# Source: open5gs/templates/udm-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-udm-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - udm.open5gs.int
+---
+# Source: open5gs/templates/udr-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: open5gs-udr-gw
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http2
+      protocol: HTTP2
+    hosts:
+    - udr.open5gs.int
+---
+# Source: open5gs/templates/ausf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-ausf-vs
+spec:
+  hosts:
+  - ausf.open5gs.int
+  gateways:
+  - open5gs-ausf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-ausf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/bsf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-bsf-vs
+spec:
+  hosts:
+  - bsf.open5gs.int
+  gateways:
+  - open5gs-bsf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-bsf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/mongodb-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-mongodb-vs
+spec:
+  hosts:
+  - db.open5gs.int
+  gateways:
+  - open5gs-mongodb-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-mongodb
+        port:
+          number: 3000
+---
+# Source: open5gs/templates/nrf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-nrf-vs
+spec:
+  hosts:
+  - nrf.open5gs.int
+  gateways:
+  - open5gs-nrf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-nrf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/nssf.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-nssf-vs
+spec:
+  hosts:
+  - nss.open5gs.int
+  gateways:
+  - open5gs-nssf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-nssf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/pcf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-pcf-vs
+spec:
+  hosts:
+  - pcf.open5gs.int
+  gateways:
+  - open5gs-pcf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-pcf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/scp-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-scp-vs
+spec:
+  hosts:
+  - scp.open5gs.int
+  gateways:
+  - open5gs-scp-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-scp
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/smf-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-smf-vs
+spec:
+  hosts:
+  - smf.open5gs.int
+  gateways:
+  - open5gs-smf-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-smf
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/udm-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-udm-vs
+spec:
+  hosts:
+  - udm.open5gs.int
+  gateways:
+  - open5gs-udm-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-udm
+        port:
+          number: 8080
+---
+# Source: open5gs/templates/udr-deploy.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: open5gs-udr-vs
+spec:
+  hosts:
+  - udr.open5gs.int
+  gateways:
+  - open5gs-udr-gw
+  http:
+  - match:
+    - uri:
+        prefix: /  
+    route:
+    - destination:
+        host: open5gs-udr
+        port:
+          number: 8080

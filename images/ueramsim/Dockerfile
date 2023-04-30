@@ -19,7 +19,7 @@ LABEL maintainer="eduardoefb@gmail.com"
 
 # Update packages and install kubectl:
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils python3 python3-yaml -y && \
     cd /tmp/ && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
     mv /tmp/kubectl /usr/local/bin/kubectl
 
@@ -27,7 +27,8 @@ RUN apt-get update && \
 COPY --from=builder --chown=root:root /opt/UERANSIM /opt/UERANSIM    
 COPY --chown=root:root start_gnodeb.sh /opt/start_gnodeb.sh
 COPY --chown=root:root gnodeb_liveness.sh /opt/gnodeb_liveness.sh
+COPY --chown=root:root subscriber_config.py /opt/subscriber_config.py
 COPY --chown=root:root start_ue.sh /opt/start_ue.sh
 
-RUN chmod +x /opt/start_ue.sh /opt/start_gnodeb.sh /usr/local/bin/kubectl /opt/gnodeb_liveness.sh
+RUN chmod +x /opt/start_ue.sh /opt/start_gnodeb.sh /usr/local/bin/kubectl /opt/gnodeb_liveness.sh /opt/subscriber_config.py
 

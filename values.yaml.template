@@ -14,13 +14,46 @@ upf_ip: "10.45.0.1"
 upf_mask: "16"
 istio_enabled: true 
 istio_domain: ${ISTIO_DOMAIN}
-subscriber:
-  imsi: '724170000000001'
-  msisdn: '5521998110001'
-  name: ue01
-  id: '1'    
-  key: '465B5CE8B199B49FAA5F0A2EE238A6B0'         
-  op: 'E8ED289DEBA952E4283B54E88E6183C0'
-  imei: '356938035643803'
-  imeisv: '4370816125816151'
-  amf: '8000'
+
+subscribers:
+  - name: ue01
+    imsi: '724170000000001'
+    msisdn: '5521998110001'
+    id: '1'    
+    key: '465B5CE8B199B49FAA5F0A2EE238A6B0'         
+    opc: 'E8ED289DEBA952E4283B54E88E6183C0'
+    imei: '356938035643803'
+    imeisv: '4370816125816151'
+    amf: '8000'
+    slice:
+      sst: 1
+      dl_ambr: 1000000000
+      ul_ambr: 1000000000
+
+  - name: ue02
+    imsi: '724170000000002'
+    msisdn: '5521998110002'
+    id: '2'    
+    key: '475B5CE8B199B49FAA5F0A2EE238A6B1'         
+    opc: 'E6ED289DEBA952E4283B54E88E6183C2'
+    imei: '356938035643814'
+    imeisv: '4370816125816177'
+    amf: '8000' 
+    slice:
+      sst: 1
+      dl_ambr: 1000000000
+      ul_ambr: 1000000000     
+
+  - name: ue03
+    imsi: '724170000000003'
+    msisdn: '5521998110003'
+    id: '3'    
+    key: '475B5CE8B199B49FAA5F0B1EE238A6B1'         
+    opc: 'E6ED289DEBA952E4283B54C98E6183C2'
+    imei: '356938035633811'
+    imeisv: '4370816115896177'
+    amf: '8000'  
+    slice:
+      sst: 1
+      dl_ambr: 1000000000
+      ul_ambr: 1000000000    

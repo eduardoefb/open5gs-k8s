@@ -25,8 +25,8 @@ spec:
         image: {{ .Values.registry_url }}/{{ .Values.dbctl_image_name }}:{{ .Values.image_tag }}
         env:
           - name: PREFIX
-            value: {{ .Values.prefix }}          
-        command: ["/home/open5gs/subscriber_create.sh"]
+            value: {{ .Values.prefix }}                  
+        command: ["/home/open5gs/subscriber.py"]
         volumeMounts:
         - name: subscriber-data
           mountPath: /opt/open5gs/        
