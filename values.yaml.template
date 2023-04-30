@@ -57,3 +57,17 @@ subscribers:
       sst: 1
       dl_ambr: 1000000000
       ul_ambr: 1000000000    
+
+  - name: ue04
+    imsi: '724170000000004'
+    msisdn: '5521998110004'
+    id: '3'    
+    key: '475B5CE8B199B49FAA5F0B1EE238A6B4'         
+    opc: 'E6ED289DEBA952E4283B54C98E6183C4'
+    imei: '356938035633841'
+    imeisv: '4370816115846177'
+    amf: '8000'  
+    slice:
+      sst: 1
+      dl_ambr: 1000000000
+      ul_ambr: 1000000000    
