@@ -25,6 +25,7 @@ data:
             port: 8080
             s_nssai:
               sst: 1
+              
 
     scp:
         sbi:

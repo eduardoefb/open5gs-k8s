@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Values.prefix }}-scp
   labels:
@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: {{ .Values.prefix }}-scp
 
-  serviceName: {{ .Values.prefix }}-scp
-  podManagementPolicy: OrderedReady
+  #serviceName: {{ .Values.prefix }}-scp
+  #podManagementPolicy: OrderedReady
 
   template:
     metadata:

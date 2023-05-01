@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Values.prefix }}-nssf
   labels:
@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: {{ .Values.prefix }}-nssf
 
-  serviceName: {{ .Values.prefix }}-nssf
-  podManagementPolicy: OrderedReady
+  #serviceName: {{ .Values.prefix }}-nssf
+  #podManagementPolicy: OrderedReady
   
   template:
     metadata:

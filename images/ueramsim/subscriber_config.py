@@ -11,14 +11,8 @@ with open(values_file, 'r') as f:
 pod_id = int(str(os.environ['HOSTNAME']).split("-")[-1])
 
 subscriber = values[pod_id]
-mcc = subscriber["imsi"][0:3]
-
-# MNC with len=2
-mnc = subscriber["imsi"][3:5]
-
-# MNC with len=3
-# mnc = subscriber["imsi"][3:6]
-
+mcc = os.environ['MCC']
+mnc = os.environ['MNC']
 
 fp = open("/etc/subscriber.yaml", "w")
 

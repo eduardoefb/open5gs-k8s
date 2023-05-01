@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Values.prefix }}-pcf
   labels:
@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: {{ .Values.prefix }}-pcf
 
-  serviceName: {{ .Values.prefix }}-pcf
-  podManagementPolicy: OrderedReady
+  #serviceName: {{ .Values.prefix }}-pcf
+  #podManagementPolicy: OrderedReady
 
   template:
     metadata:

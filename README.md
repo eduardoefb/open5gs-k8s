@@ -177,7 +177,7 @@ kubectl exec -it ${PREFIX}-amf-0 -it -- \
 ```shell
 PREFIX="open5gs"
 SUPI="724170000000001"
-kubectl exec -it ${PREFIX}-udm-0 -it -- \
+kubectl exec -it `kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` -it -- \
    nghttp http://${PREFIX}-udr:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
    -H':method: GET' \
    -H'user-agent: UDM'
@@ -204,7 +204,7 @@ kubectl exec -it ${PREFIX}-udm-0 -it -- \
 ```shell
 PREFIX="open5gs"
 SUPI="724170000000001"
-kubectl exec -it ${PREFIX}-udm-0 -it -- \
+kubectl exec -it `kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` -it -- \
    nghttp http://${PREFIX}-scp:8080/nudr-dr/v1/subscription-data/imsi-${SUPI}/authentication-data/authentication-subscription  \
    -H':method: GET' \
    -H "3gpp-sbi-target-apiroot: http://${PREFIX}-udr:8080" \

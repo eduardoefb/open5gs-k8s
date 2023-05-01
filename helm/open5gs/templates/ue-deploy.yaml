@@ -44,7 +44,12 @@ spec:
           - name: NETYPE
             value: ue   
           - name: PREFIX
-            value: {{ .Values.prefix }}  
+            value: {{ .Values.prefix }} 
+          - name: MCC
+            value: "{{ .Values.mcc }}"
+          - name: MNC
+            value: "{{ .Values.mnc }}"
+
         command:
           - "/opt/start_ue.sh"
         volumeMounts:

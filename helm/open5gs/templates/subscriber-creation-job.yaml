@@ -26,7 +26,7 @@ spec:
         env:
           - name: PREFIX
             value: {{ .Values.prefix }}                  
-        command: ["/home/open5gs/subscriber.py"]
+        command: ["/home/open5gs/subscriber.py"]        
         volumeMounts:
         - name: subscriber-data
           mountPath: /opt/open5gs/        

@@ -26,7 +26,7 @@ for p in values:
                 "purge_flag": [],
                 "slice":[
                 {
-                    "sst": int(p["slice"]["sst"]),
+                    "sst": int(p["slice"]["sst"]),                    
                     "default_indicator": True, 
                         "session": [
                         {

@@ -15,17 +15,6 @@ upf_mask: "16"
 istio_enabled: true 
 istio_domain: open5gs.int
 
-subscriber:
-  imsi: '724170000000001'
-  msisdn: '5521998110001'
-  name: ue01
-  id: '1'    
-  key: '465B5CE8B199B49FAA5F0A2EE238A6B0'         
-  op: 'E8ED289DEBA952E4283B54E88E6183C0'
-  imei: '356938035643803'
-  imeisv: '4370816125816151'
-  amf: '8000'
-
 subscribers:
   - name: ue01
     imsi: '724170000000001'

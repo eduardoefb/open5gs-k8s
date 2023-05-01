@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Values.prefix }}-udm
   labels:
@@ -10,8 +10,8 @@ spec:
     matchLabels:
       app: {{ .Values.prefix }}-udm
 
-  serviceName: {{ .Values.prefix }}-udm
-  podManagementPolicy: OrderedReady
+  #serviceName: {{ .Values.prefix }}-udm
+  #podManagementPolicy: OrderedReady
 
   template:
     metadata:

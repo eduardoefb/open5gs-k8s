@@ -33,6 +33,17 @@ data:
           
         mtu: 1400
         freeDiameter: /etc/freeDiameter/smf.conf
+        info:
+          - s_nssai:
+              - sst: 1
+                sd: 000001
+                dnn:
+                  - internet
+            tai:
+              - plmn_id:
+                  mcc: {{ .Values.mcc }}
+                  mnc: {{ .Values.mnc }}
+                tac: {{ .Values.tac }}
     scp:
         sbi:
           - addr: {{ .Values.prefix }}-scp
