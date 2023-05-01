@@ -12,7 +12,7 @@ export MCC="724"
 export MNC="17"
 export TAC="100"
 export ISTIO_DOMAIN="${NAMESPACE}.int"
-export INSTALLATION_NAME="open5g"
+export INSTALLATION_NAME="open5gs"
 
 function increment_version(){
   version=${1}
