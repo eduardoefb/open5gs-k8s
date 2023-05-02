@@ -31,18 +31,14 @@ spec:
         image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}   
         command: ["/bin/bash","-c"]
         args: ["/opt/start_mongodb.sh"]
-
         ports:
         - containerPort: 3000
         - containerPort: 27017
-
-
         readinessProbe:
           tcpSocket:
             port: 27017
           initialDelaySeconds: 5
           periodSeconds: 10   
-
         livenessProbe:
           tcpSocket:
             port: 27017

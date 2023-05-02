@@ -62,6 +62,17 @@ spec:
         - containerPort: 8805
         - containerPort: 2123
         - containerPort: 2152
+        readinessProbe:
+          tcpSocket:
+            port: 8080             
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080           
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          failureThreshold: 3         
       volumes:
         - name: {{ .Values.prefix }}
           configMap:

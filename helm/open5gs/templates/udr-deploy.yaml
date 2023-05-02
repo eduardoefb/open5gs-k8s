@@ -56,12 +56,23 @@ spec:
               mountPath: /opt/open5gs/config/
         ports:
         - containerPort: 8080
-        - containerPort: 27017
-        
+        - containerPort: 27017   
+        readinessProbe:
+          tcpSocket:
+            port: 8080             
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080           
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          failureThreshold: 3              
       volumes:
         - name: {{ .Values.prefix }}
           configMap:
             name: {{ .Values.prefix }}-udr
+             
 ---
 apiVersion: v1
 kind: Service

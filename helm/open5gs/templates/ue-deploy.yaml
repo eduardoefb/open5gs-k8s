@@ -56,34 +56,26 @@ spec:
             - name: {{ .Values.prefix }}
               mountPath: /opt/open5gs/config/
             - name: dev-tun
-              mountPath: /dev/net/tun              
-        ports:
-        - containerPort: 2152
-        - containerPort: 8805
-        - containerPort: 9090
+              mountPath: /dev/net/tun
         readinessProbe:
           exec:
             command:
               - "ping" 
               - "-c" 
               - "1" 
-              - "{{ .Values.upf_ip }}"
-              
+              - "{{ .Values.upf_ip }}"              
           initialDelaySeconds: 2
           periodSeconds: 5
-
         livenessProbe:
           exec:
             command:
               - "ping" 
               - "-c" 
               - "1" 
-              - "{{ .Values.upf_ip }}"
-              
+              - "{{ .Values.upf_ip }}"              
           initialDelaySeconds: 15
           periodSeconds: 5
-          failureThreshold: 3
-        
+          failureThreshold: 3        
       volumes:
         - name: {{ .Values.prefix }}
           configMap:

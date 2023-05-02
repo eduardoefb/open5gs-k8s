@@ -49,23 +49,19 @@ spec:
               mountPath: /opt/open5gs/config/
             - name: open5gs-hnet
               mountPath: /etc/open5gs/hnet
-
         ports:
         - containerPort: 8080
-
         readinessProbe:
           tcpSocket:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10   
-
         livenessProbe:
           tcpSocket:
             port: 8080
           initialDelaySeconds: 15
           periodSeconds: 10
           failureThreshold: 3          
-          
       volumes:
         - name: {{ .Values.prefix }}
           configMap:

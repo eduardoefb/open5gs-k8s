@@ -49,13 +49,11 @@ spec:
               mountPath: /opt/open5gs/config/
         ports:
         - containerPort: 8080
-
         readinessProbe:
           tcpSocket:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10   
-
         livenessProbe:
           tcpSocket:
             port: 8080

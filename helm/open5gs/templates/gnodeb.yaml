@@ -59,22 +59,19 @@ spec:
         - containerPort: 2152
         - containerPort: 4497
         - containerPort: 43075
-  
         readinessProbe:
           exec:
             command:
-              - "/opt/gnodeb_liveness.sh"               
+              - "/opt/gnodeb_probe.sh"               
           initialDelaySeconds: 2
           periodSeconds: 5 
-
         livenessProbe:
           exec:
             command:
-              - "/opt/gnodeb_liveness.sh"               
+              - "/opt/gnodeb_probe.sh"               
           initialDelaySeconds: 15
           periodSeconds: 5   
-          failureThreshold: 3     
-        
+          failureThreshold: 3         
       volumes:
         - name: {{ .Values.prefix }}
           configMap:
