@@ -9,10 +9,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-smf
-
   serviceName: {{ .Values.prefix }}-smf
   podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:
@@ -77,7 +75,6 @@ spec:
         - name: {{ .Values.prefix }}
           configMap:
             name: {{ .Values.prefix }}-smf
----
 ---
 apiVersion: v1
 kind: Service

@@ -14,8 +14,6 @@ data:
           cacert: /etc/open5gs/tls/ca.crt
           key: /etc/open5gs/tls/nssf.key
           cert: /etc/open5gs/tls/nssf.crt
-
-
     nssf:
         sbi:
           - addr: 0.0.0.0
@@ -25,8 +23,6 @@ data:
             port: 8080
             s_nssai:
               sst: 1
-              
-
     scp:
         sbi:
           - addr: {{ .Values.prefix }}-scp

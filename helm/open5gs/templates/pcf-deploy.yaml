@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-pcf
-
-  #serviceName: {{ .Values.prefix }}-pcf
-  #podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:

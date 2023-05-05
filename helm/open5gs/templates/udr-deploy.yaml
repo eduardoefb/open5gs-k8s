@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-udr
-
-  #serviceName: {{ .Values.prefix }}-udr
-  #podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:
@@ -71,8 +67,7 @@ spec:
       volumes:
         - name: {{ .Values.prefix }}
           configMap:
-            name: {{ .Values.prefix }}-udr
-             
+            name: {{ .Values.prefix }}-udr           
 ---
 apiVersion: v1
 kind: Service

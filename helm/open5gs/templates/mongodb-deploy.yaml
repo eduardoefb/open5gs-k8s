@@ -9,10 +9,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-mongodb
-  
   serviceName: {{ .Values.prefix }}-mongodb
   podManagementPolicy: OrderedReady
-  
   template:
     metadata:
       labels:

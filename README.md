@@ -332,3 +332,14 @@ kubectl exec -it ${PREFIX}-amf-0 -it -- \
 }
 ```
 
+## Debugging nodes:
+
+To debug nodes (execute tcpdump, for example), it can be done by executing the follwing procedure:
+
+For now, only public images are working.
+```shell
+registry=`cat REGISTRY_URL`
+tag=`cat IMAGE_TAG`
+kubectl debug node/k8s-worker-0 -it --image=${registry}/debug:${tag}
+
+```

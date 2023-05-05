@@ -9,17 +9,14 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-upf
-
   serviceName: {{ .Values.prefix }}-upf
   podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:
         app: {{ .Values.prefix }}-upf
       annotations:
         sidecar.istio.io/inject: "{{ .Values.istio_enabled }}"      
-
     spec:
       securityContext:
         runAsUser: 0
@@ -47,13 +44,11 @@ spec:
             - name: open5gs
               mountPath: /opt/open5gs/config/
             - name: dev-tun
-              mountPath: /dev/net/tun
-                   
+              mountPath: /dev/net/tun                   
         ports:
         - containerPort: 2152
         - containerPort: 8805
-        - containerPort: 9090
-        
+        - containerPort: 9090        
       volumes:
         - name: {{ .Values.prefix }}
           configMap:
@@ -70,7 +65,6 @@ metadata:
   labels:
     app: {{ .Values.prefix }}-upf
   name: {{ .Values.prefix }}-upf
-
 spec:
   ports:
   - port: 2152    

@@ -9,10 +9,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-gnodeb
-
   serviceName: {{ .Values.prefix }}-gnodeb
   podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:

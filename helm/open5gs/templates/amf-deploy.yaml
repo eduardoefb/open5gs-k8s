@@ -9,10 +9,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-amf
-
   serviceName: {{ .Values.prefix }}-amf
   podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:

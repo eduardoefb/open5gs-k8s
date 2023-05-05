@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-ausf
-
-  #serviceName: {{ .Values.prefix }}-ausf
-  #podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:
@@ -47,24 +43,19 @@ spec:
         volumeMounts:
             - name: {{ .Values.prefix }}
               mountPath: /opt/open5gs/config/
-
         ports:
         - containerPort: 8080 
-
         readinessProbe:
           tcpSocket:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10   
-
         livenessProbe:
           tcpSocket:
             port: 8080
           initialDelaySeconds: 15
           periodSeconds: 10
-          failureThreshold: 3  
-          
-                  
+          failureThreshold: 3                            
       volumes:
         - name: {{ .Values.prefix }}
           configMap:
@@ -85,8 +76,7 @@ spec:
   selector:
     app: {{ .Values.prefix }}-ausf
   sessionAffinity: None
-  type: ClusterIP            
-
+  type: ClusterIP
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway

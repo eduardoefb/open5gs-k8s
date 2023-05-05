@@ -3,11 +3,9 @@ data:
   gnodeb.yaml: |
     mcc: '{{ .Values.mcc }}'
     mnc: '{{ .Values.mnc }}'
-
     nci: '0x000000010'
     idLength: 32
     tac: '{{ .Values.tac }}'
-
     linkIp: 0.0.0.0
     ngapIp: 0.0.0.0
     gtpIp: 0.0.0.0

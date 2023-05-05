@@ -4,7 +4,6 @@ data:
     db_uri: mongodb://{{ .Values.prefix }}-mongodb/open5gs
     logger:
         file: /var/log/open5gs/nrf.log
-
     sbi:
         server:
           no_tls: true
@@ -16,7 +15,6 @@ data:
           cacert: /etc/open5gs/tls/ca.crt
           key: /etc/open5gs/tls/nrf.key
           cert: /etc/open5gs/tls/nrf.crt
-
     nrf:
         sbi:
           addr:

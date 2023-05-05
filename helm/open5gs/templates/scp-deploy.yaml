@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-scp
-
-  #serviceName: {{ .Values.prefix }}-scp
-  #podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:

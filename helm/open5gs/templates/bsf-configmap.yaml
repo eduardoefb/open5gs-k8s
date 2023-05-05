@@ -25,7 +25,6 @@ data:
     parameter:
     max:
     time:
-
 kind: ConfigMap
 metadata:
   name: {{ .Values.prefix }}-bsf

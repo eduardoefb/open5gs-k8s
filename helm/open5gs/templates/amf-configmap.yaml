@@ -14,7 +14,6 @@ data:
           cacert: /etc/open5gs/tls/ca.crt
           key: /etc/open5gs/tls/amf.key
           cert: /etc/open5gs/tls/amf.crt
-
     amf:
         sbi:
           - addr: 0.0.0.0

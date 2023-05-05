@@ -18,8 +18,7 @@ spec:
            - "/opt/wait_mongodb.sh" 
         env: 
           - name: PREFIX
-            value: {{ .Values.prefix }}              
-
+            value: {{ .Values.prefix }}
       containers:
       - name: dbctl
         image: {{ .Values.registry_url }}/{{ .Values.dbctl_image_name }}:{{ .Values.image_tag }}

@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-udm
-
-  #serviceName: {{ .Values.prefix }}-udm
-  #podManagementPolicy: OrderedReady
-
   template:
     metadata:
       labels:

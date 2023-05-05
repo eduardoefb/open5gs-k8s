@@ -9,10 +9,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.prefix }}-nssf
-
-  #serviceName: {{ .Values.prefix }}-nssf
-  #podManagementPolicy: OrderedReady
-  
   template:
     metadata:
       labels:
