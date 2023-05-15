@@ -332,14 +332,58 @@ kubectl exec -it ${PREFIX}-amf-0 -it -- \
 }
 ```
 
+
+#### Testing profile A/B  with concealed suci
+To test the deconcealing sucis in profiles A and B, connect to the tsh pod:
+```shell
+PREFIX="open5gs"
+kubectl exec -it ${PREFIX}-tsh-0 -- bash
+cd ~
+```
+
+- Profile A:
+To list the key ids for profile A, execute the follwing commands:
+```shell
+udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` 
+kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml
+kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -1 "scheme: 1"
+```
+
+Testing with key id 1:
+```shell
+key_id=1
+udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` 
+key_file=`kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -A2 " id: ${key_id}" | grep "key: " | awk '{print $NF}' | sed 's/\x0d//g'`
+kubectl exec -it  ${udm_pod_name} -- cat ${key_file}  > /tmp/private_key.pem
+python3 ~/enc_suci.py --supi_type 0 --routing_indicator 0000 --scheme_id 1 --key_id ${key_id} --plmn 72417 --msin 0000000001 --key_file /tmp/private_key.pem
+cat suci.json
+nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications  -H':method: POST' -H'user-agent: AMF' -H 'content-type: application/json'  -d suci.json
+```
+
+- Profile B:
+To list the key ids for profile B, execute the follwing commands:
+```shell
+udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` 
+kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -1 "scheme: 2"
+```
+
+Testing with key id 2:
+```shell
+key_id=2
+udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metadata.name}'` 
+key_file=`kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -A2 " id: ${key_id}" | grep "key: " | awk '{print $NF}' | sed 's/\x0d//g'`
+kubectl exec -it  ${udm_pod_name} -- cat ${key_file}  > /tmp/private_key.pem
+python3 ~/enc_suci.py --supi_type 0 --routing_indicator 0000 --scheme_id 2 --key_id ${key_id} --plmn 72417 --msin 0000000001 --key_file /tmp/private_key.pem
+cat suci.json
+nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications  -H':method: POST' -H'user-agent: AMF' -H 'content-type: application/json'  -d suci.json
+
 ## Debugging nodes:
 
 To debug nodes (execute tcpdump, for example), it can be done by executing the follwing procedure:
 
-For now, only public images are working.
 ```shell
 registry=`cat REGISTRY_URL`
 tag=`cat IMAGE_TAG`
-kubectl debug node/k8s-worker-0 -it --image=${registry}/debug:${tag}
+kubectl debug node/k8s-worker-0 -it --image=debian:11
 
 ```

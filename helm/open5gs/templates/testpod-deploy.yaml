@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.prefix }}-tsh
+  labels:
+    app: {{ .Values.prefix }}-tsh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.prefix }}-tsh
+  serviceName: {{ .Values.prefix }}-tsh
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.prefix }}-tsh
+      annotations:
+        sidecar.istio.io/inject: "{{ .Values.istio_enabled }}"        
+    spec:
+      securityContext:
+        runAsUser: 1024
+        runAsGroup: 1024
+        fsGroup: 1024    
+      imagePullSecrets:
+      - name: {{ .Values.registry_secret }}
+      containers:
+      - name: {{ .Values.prefix }}-tsh
+        image: {{ .Values.registry_url }}/{{ .Values.test_image_name }}:{{ .Values.image_tag }}   
+        command: ["sleep","3650d"]
+        env:
+          - name: NETYPE
+            value: pcf  
+          - name: PREFIX
+            value: {{ .Values.prefix }}          
+      

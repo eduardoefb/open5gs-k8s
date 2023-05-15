@@ -5,6 +5,7 @@ export INIT_IMAGE_NAME="init"
 export OPEN5GS_IMAGE_NAME="open5gs"
 export DBCTL_IMAGE_NAME="dbctl"
 export DEBUG_IMAGE_NAME="debug"
+export TEST_IMAGE_NAME="testpod"
 export REGISTRY_URL="registry.kube.int/open5gs"
 export PREFIX="open5gs"
 export NAMESPACE="open5gs"
@@ -84,10 +85,11 @@ function deploy(){
   # Create curve25519 keys:
   for i in 1 3 5; do openssl genpkey -algorithm X25519 -out curve25519-${i}.key; done
 
-  # Generate ec  keys:
+  # Generate ec keys:
   for i in 2 4 6; do
     openssl ecparam -name secp256k1 -out secp256k1.pem
-    openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem
+    #openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem
+    openssl ecparam -name prime256v1 -in secp256k1.pem -genkey -noout -out secp256k1-key.pem    
     cat secp256k1.pem > secp256r1-${i}.key
     cat secp256k1-key.pem >> secp256r1-${i}.key
     rm sec*.pem

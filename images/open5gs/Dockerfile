@@ -6,8 +6,8 @@ ENV OPEN5GS_UID=1024
 ENV OPEN5GS_GID=1024
 
 # Update package
-RUN  DEBIAN_FRONTEND=noninteractive apt-get update && \
-     DEBIAN_FRONTEND=noninteractive apt-get -y install curl \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl \
             software-properties-common \
             iproute2 \
             nghttp2 \

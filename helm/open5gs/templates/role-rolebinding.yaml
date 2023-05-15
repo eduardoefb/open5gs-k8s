@@ -5,8 +5,8 @@ metadata:
   name: pod-list-permission
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["list", "get"]
+  resources: ["pods", "pods/exec"]
+  verbs: ["list", "get", "exec", "create"]
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
