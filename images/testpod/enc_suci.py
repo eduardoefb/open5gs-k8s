@@ -27,6 +27,7 @@ def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, 
     elif scheme_id == 2:
         ue_ecies = ECIES_UE(profile='B')
     
+    print(supi)
     if scheme_id in [1, 2]:
         ue_ecies.generate_sharedkey(hn_pubkey)
         ue_pubkey, ue_encmsin, ue_mac = ue_ecies.protect(supi['Value']['Output'].to_bytes())
@@ -50,9 +51,9 @@ def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, 
     if scheme_id in [1, 2]:
         print(f"\n#################PRIVATE KEY###########\n{hn_privkey.hex()}")
         print(f"\n#################PUBLIC KEY############\n{hn_pubkey.hex()}")
-        suci_string = f"suci-{supi_type}-{plmn[:3]}-{plmn[3:5]}-{routing_indicator}-{scheme_id}-{key_id}-{ue_key_text}{enc_msin_text}{mac_text}"
+        suci_string = f"suci-{supi_type}-{plmn[:3]}-{plmn[3:6]}-{routing_indicator}-{scheme_id}-{key_id}-{ue_key_text}{enc_msin_text}{mac_text}"
 
-    net_string = f"5G:mnc0{plmn[3:5]}.mcc{plmn[:3]}.3gppnetwork.org"
+    net_string = f"5G:mnc{plmn[3:6]}.mcc{plmn[:3]}.3gppnetwork.org"
     print(f"\n############SUCI STRING################\n{suci_string}")
 
     json_file = open("suci.json", "w")
@@ -139,8 +140,8 @@ imsi = f"{plmn}{msin}"
 
 # the MSIN part of the IMSI is set as the Output part of the SUPI
 supi = FGSIDSUPI(val={ 'Fmt': FGSIDFMT_IMSI, \
-                       'Value': {'PLMN': imsi[:5], \
-                       'Output': imsi[5:]}}) 
+                       'Value': {'PLMN': plmn, \
+                       'Output': msin}}) 
 
 
 # Load the private key and return the hn_priv and public keys
