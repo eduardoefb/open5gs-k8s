@@ -3,8 +3,8 @@ FROM ubuntu:22.04 AS builder
 LABEL maintainer="eduardoefb@gmail.com"
 
 # Update package and install needed files:
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common curl cmake build-essential make g++ libsctp-dev lksctp-tools iproute2 git 
+RUN DEBIAN_FRONTEND=apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common curl cmake build-essential make g++ libsctp-dev lksctp-tools iproute2 git 
 
 # Download ueramsim and build it:
 WORKDIR /opt
