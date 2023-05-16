@@ -3,7 +3,7 @@ FROM ubuntu:22.04 AS builder
 LABEL maintainer="eduardoefb@gmail.com"
 
 # Update package and install needed files:
-RUN DEBIAN_FRONTEND=apt-get update
+RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common curl cmake build-essential make g++ libsctp-dev lksctp-tools iproute2 git 
 
 # Download ueramsim and build it:
@@ -18,8 +18,8 @@ FROM ubuntu:22.04
 LABEL maintainer="eduardoefb@gmail.com"
 
 # Update packages and install kubectl:
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils python3 python3-yaml -y && \
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install lksctp-tools curl iproute2 iputils-ping traceroute net-tools dnsutils python3 python3-yaml -y && \
     cd /tmp/ && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
     mv /tmp/kubectl /usr/local/bin/kubectl
 
