@@ -26,7 +26,7 @@ COPY wait_scp.sh /opt/wait_scp.sh
 COPY wait_scp_service.sh /opt/wait_scp_service.sh
 COPY wait_scp.sh /opt/wait_upf.sh
 COPY wait_mongodb.sh /opt/wait_mongodb.sh
-COPY vars.sh /opt/vars.sh
+# COPY vars.sh /opt/vars.sh
 
 # Allow execution:
 RUN chmod +x /opt/wait_amf.sh  && \
