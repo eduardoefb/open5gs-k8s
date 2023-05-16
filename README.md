@@ -376,14 +376,11 @@ kubectl exec -it  ${udm_pod_name} -- cat ${key_file}  > /tmp/private_key.pem
 python3 ~/enc_suci.py --supi_type 0 --routing_indicator 0000 --scheme_id 2 --key_id ${key_id} --plmn 72417 --msin 0000000001 --key_file /tmp/private_key.pem
 cat suci.json
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications  -H':method: POST' -H'user-agent: AMF' -H 'content-type: application/json'  -d suci.json
-
+```
 ## Debugging nodes:
 
 To debug nodes (execute tcpdump, for example), it can be done by executing the follwing procedure:
 
 ```shell
-registry=`cat REGISTRY_URL`
-tag=`cat IMAGE_TAG`
 kubectl debug node/k8s-worker-0 -it --image=debian:11
-
 ```
