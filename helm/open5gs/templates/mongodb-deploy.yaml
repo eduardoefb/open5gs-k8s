@@ -32,6 +32,9 @@ spec:
         ports:
         - containerPort: 3000
         - containerPort: 27017
+        volumeMounts:
+          - name: {{ .Values.prefix }}-mongodb-pvc
+            mountPath: /var/lib/mongodb
         readinessProbe:
           tcpSocket:
             port: 27017
@@ -42,7 +45,18 @@ spec:
             port: 27017
           initialDelaySeconds: 15
           periodSeconds: 10
-          failureThreshold: 3          
+          failureThreshold: 3
+{{- if .Values.pvc.use }} 
+  volumeClaimTemplates:          
+  - metadata:
+      name: {{ .Values.prefix }}-mongodb-pvc
+    spec:
+      storageClassName: {{ .Values.pvc.storageClassName }}
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+{{- end }}             
         
 ---
 apiVersion: v1
@@ -101,3 +115,5 @@ spec:
         host: {{ .Values.prefix }}-mongodb
         port:
           number: 3000
+
+  

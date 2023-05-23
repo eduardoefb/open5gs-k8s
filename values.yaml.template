@@ -16,7 +16,10 @@ upf_mask: "16"
 istio_enabled: true 
 istio_domain: ${ISTIO_DOMAIN}
 
-
+pvc:
+  use: ${use_pvc}
+  storageClassName: ${storageclass_name}
+  
 
 subscribers:
   - name: ue01

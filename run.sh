@@ -63,7 +63,7 @@ function build(){
 }
 
 function deploy(){
-  cwd=`pwd`
+  cwd=`pwd`  
   kubectl delete namespace ${NAMESPACE} >/dev/null 2>&1
   kubectl create namespace ${NAMESPACE}
   kubectl config set-context --current --namespace=${NAMESPACE}
@@ -88,7 +88,6 @@ function deploy(){
   # Generate ec keys:
   for i in 2 4 6; do
     openssl ecparam -name secp256k1 -out secp256k1.pem
-    #openssl ecparam -in secp256k1.pem -genkey -noout -out secp256k1-key.pem
     openssl ecparam -name prime256v1 -in secp256k1.pem -genkey -noout -out secp256k1-key.pem    
     cat secp256k1.pem > secp256r1-${i}.key
     cat secp256k1-key.pem >> secp256r1-${i}.key
@@ -146,6 +145,15 @@ export IMAGE_TAG=`cat IMAGE_TAG`
 export REGISTRY_URL
 
 ## Create .values file:
+
+storageclass_name=`kubectl get storageclass -o=jsonpath='{range .items[?(@.metadata.annotations.storageclass\.kubernetes\.io/is-default-class=="true")]}{.metadata.name}{end}'`
+if [ -z "${storageclass_name}" ]; then 
+  use_pvc="False"
+else
+  use_pvc="True"
+fi
+export use_pvc
+export storageclass_name
 envsubst < values.yaml.template > values.yaml
 
 cd ${cwd}
