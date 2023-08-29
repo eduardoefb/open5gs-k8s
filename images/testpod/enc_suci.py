@@ -14,7 +14,18 @@ from cryptography.hazmat.primitives import serialization
 import argparse 
 import sys
 
-def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, routing_indicator = None, key_id = None, plmn = None, msin = None, supi_type = None):
+def generate_suci(  
+                    scheme_id = None, 
+                    hn_pubkey = None, 
+                    imsi = None, 
+                    supi = None, 
+                    routing_indicator = None, 
+                    key_id = None, 
+                    plmn = None, 
+                    msin = None, 
+                    supi_type = None
+                ):
+
     # Generate the supi encrypted:
     if scheme_id == 0:
         suci = None
@@ -26,8 +37,7 @@ def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, 
         ue_ecies = ECIES_UE(profile='A')
     elif scheme_id == 2:
         ue_ecies = ECIES_UE(profile='B')
-    
-    print(supi)
+        
     if scheme_id in [1, 2]:
         ue_ecies.generate_sharedkey(hn_pubkey)
         ue_pubkey, ue_encmsin, ue_mac = ue_ecies.protect(supi['Value']['Output'].to_bytes())
@@ -69,6 +79,78 @@ def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, 
     json_file.close()
     return suci  
 
+
+def generate_suci_from_str(  
+                    suci_str = None
+                ):
+    
+    supi_type = suci_str.split("-")[1]
+    suci_mcc = suci_str.split("-")[2]
+    suci_mnc = suci_str.split("-")[3]
+    routing_indicator = suci_str.split("-")[4]
+    scheme_id = int(suci_str.split("-")[5])
+    key_id = int(suci_str.split("-")[6])
+    pscheme_output = suci_str.split("-")[7]
+
+    suci_string = suci_str
+    
+    # Generate the supi encrypted:
+    if scheme_id == 0:
+        suci = None
+        suci_string = f"suci-{supi_type}-{plmn[:3]}-{plmn[3:5]}-{routing_indicator}-{scheme_id}-0-{msin}"
+        
+        #suci_string f"suci-0-724-17-0000-0-0-0000000001"
+    elif scheme_id == 1:
+        ue_ecies = ECIES_UE(profile='A')
+        ue_pubkey = bytes.fromhex(str(pscheme_output[:64]).strip())
+        ue_encmsin = bytes.fromhex(str(pscheme_output[64:74]).strip())
+        ue_mac = bytes.fromhex(str(pscheme_output[74:]).strip())        
+    elif scheme_id == 2:
+        ue_ecies = ECIES_UE(profile='B')
+        ue_pubkey = bytes.fromhex(str(pscheme_output[:66]).strip())
+        ue_encmsin = bytes.fromhex(str(pscheme_output[66:76]).strip())
+        ue_mac = bytes.fromhex(str(pscheme_output[76:]).strip())        
+        
+    if scheme_id in [1, 2]:
+        ue_ecies.generate_sharedkey(hn_pubkey)
+
+        suci = FGSIDSUPI(val={ 'Fmt': FGSIDFMT_IMSI, \
+                            'Value': { 'PLMN': f"{plmn}", \
+                            'ProtSchemeID': int(scheme_id), \
+                            'Output': { 'ECCEphemPK': ue_pubkey, \
+                            'CipherText': ue_encmsin, \
+                            'MAC': ue_mac}}})
+
+        # Request example:
+        ue_key_text = binascii.hexlify(ue_pubkey).decode().upper()
+        enc_msin_text = binascii.hexlify(ue_encmsin).decode().upper()
+        mac_text = binascii.hexlify(ue_mac).decode().upper()
+    
+
+    if scheme_id in [1, 2]:
+        print(f"\n####################SUCI###############\n{suci}")
+    
+    if scheme_id in [1, 2]:
+        if hn_privkey:
+            print(f"\n#################PRIVATE KEY###########\n{hn_privkey.hex()}")
+
+        print(f"\n#################PUBLIC KEY############\n{hn_pubkey.hex()}")
+        suci_string = f"suci-{supi_type}-{plmn[:3]}-{plmn[3:6]}-{routing_indicator}-{scheme_id}-{key_id}-{ue_key_text}{enc_msin_text}{mac_text}"
+
+    net_string = f"5G:mnc{plmn[3:6]}.mcc{plmn[:3]}.3gppnetwork.org"
+    print(f"\n############SUCI STRING################\n{suci_string}")
+
+    json_file = open("suci.json", "w")
+    json_str = """
+    {
+        "supiOrSuci": \"""" + str(suci_string) + """\",
+        "servingNetworkName": \""""+ str(net_string) +"""\"
+    }
+    """
+    json_file.write(json_str)
+    json_file.close()
+    return suci      
+
 def decode_suci(scheme_id = None, hn_privkey = None, imsi = None, suci = None):
     # Validating the deconcealing:
     if scheme_id == 0:
@@ -80,12 +162,18 @@ def decode_suci(scheme_id = None, hn_privkey = None, imsi = None, suci = None):
 
     rx_suci = FGSIDSUPI()
     rx_suci.from_bytes(suci.to_bytes())
-
+    print(rx_suci)
+    
     # Then decrypts the MSIN part of the SUCI
     dec_msin = hn_ecies.unprotect(rx_suci['Value']['Output']['ECCEphemPK'].get_val(), rx_suci['Value']['Output']['CipherText'].get_val(), rx_suci['Value']['Output']['MAC'].get_val()) 
 
     # The original IMSI is retrieved from the PLMN ID and decrypted MSIN
-    dec_imsi = suci['Value']['PLMN'].decode() + decode_bcd(dec_msin)
+    try:
+        dec_imsi = suci['Value']['PLMN'].decode() + decode_bcd(dec_msin)
+    except:
+        print("\nError decoding PLMN or MSIN!!!")
+        sys.exit(1)
+
     print(f"\n##########DECONCEALED SUPI#############\n{dec_imsi}")
     return(dec_imsi)
 
@@ -100,7 +188,7 @@ def load_private_key(scheme_id = None, private_key_file = None):
     if scheme_id == 0:
         hn_privkey = hn_pubkey = None
 
-    elif scheme_id == 1:
+    elif scheme_id == 1:        
         hn_privkey = private_key.private_bytes_raw()
         hn_pubkey = private_key.public_key().public_bytes_raw()
         
@@ -141,26 +229,63 @@ def load_public_key(scheme_id = None, public_key_file = None):
 
 # Parser:
 parser = argparse.ArgumentParser(description='Input data for open5gs')
-parser.add_argument('--supi_type', type=str, required=True, help='SUPI type. 0 = IMSI, 1 = Network Access Identifier (NAI)')
-parser.add_argument('--routing_indicator', type=str, required=True, help='Routing indicator. Ex: 0000')
-parser.add_argument('--scheme_id', type=int, required=True, help='Scheme ID: 0 = null-scheme, 1 = Profile A, 2 = Profile B', choices=[0, 1, 2])
-parser.add_argument('--key_id', type=int, required=True, help='Key ID')
-parser.add_argument('--plmn', type=str, required=True, help='PLMN. Ex: 72417')
-parser.add_argument('--msin', type=str, required=True, help='MSIN. Ex: 0000000001')
+parser.add_argument('--supi_type', type=str, required=False, help='SUPI type. 0 = IMSI, 1 = Network Access Identifier (NAI)')
+parser.add_argument('--routing_indicator', type=str, required=False, help='Routing indicator. Ex: 0000')
+parser.add_argument('--scheme_id', type=int, required=False, help='Scheme ID: 0 = null-scheme, 1 = Profile A, 2 = Profile B', choices=[0, 1, 2])
+parser.add_argument('--key_id', type=int, required=False, help='Key ID')
+parser.add_argument('--plmn', type=str, required=False, help='PLMN. Ex: 72417')
+parser.add_argument('--msin', type=str, required=False, help='MSIN. Ex: 0000000001')
 parser.add_argument('--private_key_file', type=str, required=False, help='Private key file')
 parser.add_argument('--public_key_file', type=str, required=False, help='Public key file')
+parser.add_argument('--suci_string', type=str, required=False, help='Suci string')
 
 args = parser.parse_args()
 
-if args.scheme_id in [1, 2] and args.private_key_file is None and args.public_key_file is None:
-    parser.error('--private_key_file or --public_key_file are required for scheme_id 1 or 2')
+if args.suci_string:
+    if args.supi_type: 
+         parser.error('--supi_type not supported when --suci_string is used')
+    if args.routing_indicator: 
+         parser.error('--routing_indicator not supported when --suci_string is used')
+    if args.scheme_id: 
+         parser.error('--scheme_id not supported when --suci_string is used')       
+    if args.key_id: 
+         parser.error('--key_id not supported when --suci_string is used')
+    if args.plmn: 
+         parser.error('--plmn not supported when --suci_string is used')
+    if args.msin: 
+         parser.error('--msin not supported when --suci_string is used')
+    if args.public_key_file: 
+         parser.error('--public_key_file not supported when --suci_string is used')
+    if args.private_key_file is None: 
+         parser.error('--private_key_file is requred when --suci_string is used')
+else:         
+    if args.supi_type is None: 
+         parser.error('--supi_type is requred when --suci_string is not used')
+    if args.routing_indicator is None: 
+         parser.error('--routing_indicator requred when --suci_string is not used')
+    if args.scheme_id is None: 
+         parser.error('--scheme_id requred when --suci_string is not used')       
+    if args.key_id is None: 
+         parser.error('--key_id requred when --suci_string is not used')
+    if args.plmn is None: 
+         parser.error('--plmn requred when --suci_string is not used')
+    if args.msin is None: 
+         parser.error('--msin requred when --suci_string is not used')
+    if args.scheme_id in [1, 2] and args.private_key_file is None and args.public_key_file is None:
+        parser.error('--private_key_file or --public_key_file are required for scheme_id 1 or 2')
 
+#if args.suci_string:
+    
+suci_str = None
 supi_type = args.supi_type    
 routing_indicator = args.routing_indicator
 prot_scheme_id = args.scheme_id 
 key_id = args.key_id
 plmn = args.plmn
 msin = args.msin 
+
+if args.suci_string:
+    suci_str = args.suci_string
 
 priv_key = None 
 public_key = None 
@@ -182,15 +307,29 @@ supi = FGSIDSUPI(val={ 'Fmt': FGSIDFMT_IMSI, \
 
 # Load the private key and return the hn_priv and public keys
 hn_privkey = None 
+print(suci_str)
+if suci_str:
+    prot_scheme_id = int(suci_str.split("-")[5])
+    supi_type = suci_str.split("-")[1]
+    mcc = suci_str.split("-")[2]
+    mnc = suci_str.split("-")[3]
+    plmn = str(mcc) + str(mnc)
+    routing_indicator = suci_str.split("-")[4]    
+    key_id = int(suci_str.split("-")[6])
+    pscheme_output = suci_str.split("-")[7]    
 
 if priv_key:
     hn_privkey, hn_pubkey = load_private_key(scheme_id = prot_scheme_id, private_key_file = priv_key)
 elif public_key:
     hn_pubkey = load_public_key(scheme_id = prot_scheme_id, public_key_file = public_key)
 
-# Generate the suci encrypted
-suci = generate_suci(scheme_id = prot_scheme_id, hn_pubkey = hn_pubkey, imsi = imsi, supi = supi, routing_indicator = routing_indicator, key_id = key_id, plmn = plmn, msin = msin, supi_type = supi_type)
+if suci_str:
+    suci = generate_suci_from_str(suci_str = suci_str)    
 
+else:
+    suci = generate_suci(scheme_id = prot_scheme_id, hn_pubkey = hn_pubkey, imsi = imsi, supi = supi, routing_indicator = routing_indicator, key_id = key_id, plmn = plmn, msin = msin, supi_type = supi_type)
+scheme_id = 1
+key_id = 1
 # Decrypt suci
 if hn_privkey:
     imsi = decode_suci(scheme_id = prot_scheme_id, hn_privkey = hn_privkey, suci = suci)
