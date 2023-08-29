@@ -49,7 +49,9 @@ def generate_suci(scheme_id = None, hn_pubkey = None, imsi = None, supi = None, 
         print(f"\n####################SUCI###############\n{suci}")
     
     if scheme_id in [1, 2]:
-        print(f"\n#################PRIVATE KEY###########\n{hn_privkey.hex()}")
+        if hn_privkey:
+            print(f"\n#################PRIVATE KEY###########\n{hn_privkey.hex()}")
+
         print(f"\n#################PUBLIC KEY############\n{hn_pubkey.hex()}")
         suci_string = f"suci-{supi_type}-{plmn[:3]}-{plmn[3:6]}-{routing_indicator}-{scheme_id}-{key_id}-{ue_key_text}{enc_msin_text}{mac_text}"
 
@@ -111,6 +113,31 @@ def load_private_key(scheme_id = None, private_key_file = None):
     return hn_privkey, hn_pubkey
 
 
+def load_public_key(scheme_id = None, public_key_file = None):
+
+    # Load private key from file and get its public key
+    if scheme_id in [1, 2]:
+        with open(str(public_key_file), "rb") as key_file:
+            key_data = key_file.read()
+        public_key = serialization.load_pem_public_key(key_data)
+
+    if scheme_id == 0:
+        hn_pubkey = None
+
+    elif scheme_id == 1:        
+        hn_pubkey = public_key.public_bytes_raw()
+        
+    elif scheme_id == 2:        
+        hn_pubkey = public_key.public_bytes(encoding=serialization.Encoding.DER, format=serialization.PublicFormat.SubjectPublicKeyInfo)
+        hn_pubkey = hn_pubkey[26:]
+        
+        #ec = ECDH_SECP256R1()
+        #ec.PrivKey = private_keine 1y
+        #hn_pubkey = bytes(ec.get_pubkey())
+        #hn_privkey = bytes(ec.get_privkey())  
+    
+    return hn_pubkey
+
 
 # Parser:
 parser = argparse.ArgumentParser(description='Input data for open5gs')
@@ -120,12 +147,13 @@ parser.add_argument('--scheme_id', type=int, required=True, help='Scheme ID: 0 =
 parser.add_argument('--key_id', type=int, required=True, help='Key ID')
 parser.add_argument('--plmn', type=str, required=True, help='PLMN. Ex: 72417')
 parser.add_argument('--msin', type=str, required=True, help='MSIN. Ex: 0000000001')
-parser.add_argument('--key_file', type=str, required=False, help='Private key file')
+parser.add_argument('--private_key_file', type=str, required=False, help='Private key file')
+parser.add_argument('--public_key_file', type=str, required=False, help='Public key file')
 
 args = parser.parse_args()
 
-if args.scheme_id in [1, 2] and args.key_file is None:
-    parser.error('--key_file is required for scheme_id 1 or 2')
+if args.scheme_id in [1, 2] and args.private_key_file is None and args.public_key_file is None:
+    parser.error('--private_key_file or --public_key_file are required for scheme_id 1 or 2')
 
 supi_type = args.supi_type    
 routing_indicator = args.routing_indicator
@@ -133,7 +161,15 @@ prot_scheme_id = args.scheme_id
 key_id = args.key_id
 plmn = args.plmn
 msin = args.msin 
-priv_key = args.key_file
+
+priv_key = None 
+public_key = None 
+
+if args.private_key_file:
+    priv_key = args.private_key_file
+
+if args.public_key_file:
+    public_key = args.public_key_file
 
 # IMSI
 imsi = f"{plmn}{msin}"
@@ -145,13 +181,17 @@ supi = FGSIDSUPI(val={ 'Fmt': FGSIDFMT_IMSI, \
 
 
 # Load the private key and return the hn_priv and public keys
-hn_privkey, hn_pubkey = load_private_key(scheme_id = prot_scheme_id, private_key_file = priv_key)
+hn_privkey = None 
+
+if priv_key:
+    hn_privkey, hn_pubkey = load_private_key(scheme_id = prot_scheme_id, private_key_file = priv_key)
+elif public_key:
+    hn_pubkey = load_public_key(scheme_id = prot_scheme_id, public_key_file = public_key)
 
 # Generate the suci encrypted
 suci = generate_suci(scheme_id = prot_scheme_id, hn_pubkey = hn_pubkey, imsi = imsi, supi = supi, routing_indicator = routing_indicator, key_id = key_id, plmn = plmn, msin = msin, supi_type = supi_type)
 
-
-
 # Decrypt suci
-imsi = decode_suci(scheme_id = prot_scheme_id, hn_privkey = hn_privkey, suci = suci)
+if hn_privkey:
+    imsi = decode_suci(scheme_id = prot_scheme_id, hn_privkey = hn_privkey, suci = suci)
 

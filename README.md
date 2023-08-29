@@ -357,18 +357,39 @@ udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metad
 
 key_file=`kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -A2 " id: ${key_id}" | grep "key: " | awk '{print $NF}' | sed 's/\x0d//g'`
 
+# Retrieve the private key from the UDM pod:
 kubectl exec -it  ${udm_pod_name} -- cat ${key_file}  > /tmp/private_key.pem
 
+# Obtain the public key from the private key:
+openssl pkey -in /tmp/private_key.pem -pubout -outform PEM -out /tmp/public_key.pem
+
+# Retrieve the bytes for both the public and private keys:
+openssl pkey -in /tmp/private_key.pem -text -noout
+
+# Retrieve the public key using the provided script and initiate the concealment process. The private key will later be utilized for the deconcealing validation phase:
 python3 ~/enc_suci.py --supi_type 0 \
 	--routing_indicator 0000 \
 	--scheme_id 1 \
 	--key_id ${key_id} \
 	--plmn 72417 \
 	--msin 0000000001 \
-	--key_file /tmp/private_key.pem
+	--private_key_file /tmp/private_key.pem
 
+
+# Alternatively, utilize solely the public key for the purpose of concealment:
+python3 ~/enc_suci.py --supi_type 0 \
+	--routing_indicator 0000 \
+	--scheme_id 1 \
+	--key_id ${key_id} \
+	--plmn 72417 \
+	--msin 0000000001 \
+	--public_key_file /tmp/public_key.pem
+
+# Review the JSON file created by the script:
 cat suci.json
 
+
+# Send the authentication for the concealed SUCI:
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications \
 	-H':method: POST' \
 	-H'user-agent: AMF' \
@@ -391,18 +412,37 @@ udm_pod_name=`kubectl get pod -l app=${PREFIX}-udm -o jsonpath='{.items[0].metad
 
 key_file=`kubectl exec -it ${udm_pod_name} -- cat /etc/open5gs/udm.yaml | grep -A2 " id: ${key_id}" | grep "key: " | awk '{print $NF}' | sed 's/\x0d//g'`
 
+# Retrieve the private key from the UDM pod:
 kubectl exec -it  ${udm_pod_name} -- cat ${key_file}  > /tmp/private_key.pem
 
+# Obtain the compressed public key from the private key:
+openssl ec -in /tmp/private_key.pem -pubout -conv_form compressed -out /tmp/public_key.pem
+
+# Retrieve the bytes for both the public (compressed) and private keys:
+openssl ec -in /tmp/private_key.pem -text -noout -conv_form compressed
+
+# Retrieve the public key using the provided script and initiate the concealment process. The private key will later be utilized for the deconcealing validation phase:
 python3 ~/enc_suci.py --supi_type 0 \
 	--routing_indicator 0000 \
 	--scheme_id 2 \
 	--key_id ${key_id} \
 	--plmn 72417 \
 	--msin 0000000001 \
-	--key_file /tmp/private_key.pem
+	--private_key_file /tmp/private_key.pem
 
+# Alternatively, utilize solely the public key for the purpose of concealment:
+python3 ~/enc_suci.py --supi_type 0 \
+	--routing_indicator 0000 \
+	--scheme_id 2 \
+	--key_id ${key_id} \
+	--plmn 72417 \
+	--msin 0000000001 \
+	--public_key_file /tmp/public_key.pem
+
+# Review the JSON file created by the script:	
 cat suci.json
 
+# Send the authentication for the concealed SUCI:
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications  \
 	-H':method: POST' \
 	-H'user-agent: AMF' \
