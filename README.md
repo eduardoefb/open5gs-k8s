@@ -388,14 +388,14 @@ python3 concealing_tool.py --deconceal \
    --json_file suci_json.json --private_key_file /tmp/private_key.pem
 
 # Review the JSON file created by the script:
-cat suci.json
+cat suci_json.json
 
 # Send the authentication for the concealed SUCI:
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications \
 	-H':method: POST' \
 	-H'user-agent: AMF' \
 	-H 'content-type: application/json'  \
-	-d suci.json
+	-d suci_json.json
 
 ```
 
@@ -444,14 +444,14 @@ python3 concealing_tool.py --deconceal \
    --json_file suci_json.json --private_key_file /tmp/private_key.pem 
 
 # Review the JSON file created by the script:	
-cat suci.json
+cat suci_json.json
 
 # Send the authentication for the concealed SUCI:
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications  \
 	-H':method: POST' \
 	-H'user-agent: AMF' \
 	-H 'content-type: application/json'  \
-	-d suci.json
+	-d suci_json.json
 ```
 ## Debugging nodes:
 
