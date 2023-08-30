@@ -366,33 +366,29 @@ openssl pkey -in /tmp/private_key.pem -pubout -outform PEM -out /tmp/public_key.
 # Retrieve the bytes for both the public and private keys:
 openssl pkey -in /tmp/private_key.pem -text -noout
 
-# Retrieve the public key using the provided script and initiate the concealment process. The private key will later be utilized for the deconcealing validation phase:
+# SUPI concealing using the public key
 cd ~/
-python3 enc_suci.py --supi_type 0 \
-	--routing_indicator 0000 \
-	--scheme_id 1 \
-	--key_id ${key_id} \
-	--plmn 72417 \
-	--msin 0000000001 \
-	--private_key_file /tmp/private_key.pem
+python3 concealing_tool.py --conceal \
+   --supi_type 0 \
+   --routing_indicator 0000 \
+   --scheme_id 1 \
+   --key_id ${key_id} \
+   --plmn 72417 \
+   --msin 0000000001 \
+   --json_file suci_json.json \
+   --private_key_file /tmp/public_key.pem
 
-# Decode SUCI string to SUPI using a private key: (replace the suci string for the generated string in the previous commands)
-python3 enc_suci.py \
+# Deconcealing SUCI to SUPI using the private key
+python3 concealing_tool.py \
    --suci_string suci-0-724-17-0000-1-1-8C9B6F15816ED9DD6D4463DD07A319D42618B2E46FEA1233D21599E55B851A49F53FD8D00F98172357C0AD2361  \
-   --private_key_file /tmp/private_key.pem  
+   --private_key_file /tmp/private_key.pem
 
-# Alternatively, utilize solely the public key for the purpose of concealment:
-python3 enc_suci.py --supi_type 0 \
-	--routing_indicator 0000 \
-	--scheme_id 1 \
-	--key_id ${key_id} \
-	--plmn 72417 \
-	--msin 0000000001 \
-	--public_key_file /tmp/public_key.pem
+# Or, from the json file:  
+python3 concealing_tool.py --deconceal \
+   --json_file suci_json.json --private_key_file /tmp/private_key.pem
 
 # Review the JSON file created by the script:
 cat suci.json
-
 
 # Send the authentication for the concealed SUCI:
 nghttp -v http://${PREFIX}-ausf:8080/nausf-auth/v1/ue-authentications \
@@ -426,31 +422,26 @@ openssl ec -in /tmp/private_key.pem -pubout -conv_form compressed -out /tmp/publ
 # Retrieve the bytes for both the public (compressed) and private keys:
 openssl ec -in /tmp/private_key.pem -text -noout -conv_form compressed
 
-# Retrieve the public key using the provided script and initiate the concealment process. The private key will later be utilized for the deconcealing validation phase:
+# SUPI concealing using the public key
 cd ~/
-python3 enc_suci.py --supi_type 0 \
-	--routing_indicator 0000 \
-	--scheme_id 2 \
-	--key_id ${key_id} \
-	--plmn 72417 \
-	--msin 0000000001 \
-	--private_key_file /tmp/private_key.pem
+python3 concealing_tool.py --conceal \
+   --supi_type 0 \
+   --routing_indicator 0000 \
+   --scheme_id 2 \
+   --key_id ${key_id} \
+   --plmn 72417 \
+   --msin 0000000001 \
+   --json_file suci_json.json \
+   --public_key_file /tmp/public_key.pem
 
 # Decode SUCI string to SUPI using a private key: (replace the suci string for the generated string in the previous commands)
-python3 enc_suci.py \
+python3 concealing_tool.py --deconceal \
    --suci_string suci-0-724-17-0000-2-2-02165E5EA0C10ACB09FED88D3A8185683AE27B588B8EBB72DBE30B1B99D997CB05A33366264F259A5A6CF1FAD8BA  \
    --private_key_file /tmp/private_key.pem    
 
-# Alternatively, utilize solely the public key for the purpose of concealment:
-python3 enc_suci.py --supi_type 0 \
-	--routing_indicator 0000 \
-	--scheme_id 2 \
-	--key_id ${key_id} \
-	--plmn 72417 \
-	--msin 0000000001 \
-	--public_key_file /tmp/public_key.pem
-
-
+# Or, from the json file:  
+python3 concealing_tool.py --deconceal \
+   --json_file suci_json.json --private_key_file /tmp/private_key.pem 
 
 # Review the JSON file created by the script:	
 cat suci.json

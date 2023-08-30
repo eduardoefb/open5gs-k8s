@@ -58,12 +58,8 @@ RUN groupmod open5gs -g ${OPEN5GS_GID} && \
     usermod open5gs -d /home/open5gs/
 
 # Copy Needed files
-COPY enc_suci.py /home/open5gs/enc_suci.py
+COPY concealing_tool.py /home/open5gs/concealing_tool.py
 
 # Set ownership and permissions of Open5GS directories and files:
 RUN chown -R open5gs:open5gs /home/open5gs && \
-    chmod +x /home/open5gs/enc_suci.py
-
-
-
-
+    chmod +x /home/open5gs/concealing_tool.py
