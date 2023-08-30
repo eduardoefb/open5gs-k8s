@@ -376,7 +376,7 @@ python3 concealing_tool.py --conceal \
    --plmn 72417 \
    --msin 0000000001 \
    --json_file suci_json.json \
-   --private_key_file /tmp/public_key.pem
+   --public_key_file /tmp/public_key.pem
 
 # Deconcealing SUCI to SUPI using the private key
 python3 concealing_tool.py \
