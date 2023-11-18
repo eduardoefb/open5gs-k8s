@@ -26,7 +26,7 @@ spec:
       - name: {{ .Values.registry_secret }}
       containers:
       - name: {{ .Values.prefix }}-upf
-        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}              
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}              
         securityContext:
           privileged: true
           capabilities:

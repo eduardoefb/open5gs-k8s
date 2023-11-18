@@ -24,7 +24,7 @@ spec:
       - name: {{ .Values.registry_secret }}
       initContainers:
       - name: wait-scp
-        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}  
         command:
            - "/opt/wait_scp.sh" 
         env: 
@@ -32,7 +32,7 @@ spec:
             value: {{ .Values.prefix }}               
       containers:
       - name: {{ .Values.prefix }}-nssf
-        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}
         env:
           - name: NETYPE
             value: nssf   
@@ -88,7 +88,7 @@ spec:
     istio: ingressgateway 
   servers:
   - port:
-      number: 80
+      number: 8080
       name: http2
       protocol: HTTP2
     hosts:

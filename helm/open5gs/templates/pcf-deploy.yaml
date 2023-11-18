@@ -24,7 +24,7 @@ spec:
       - name: {{ .Values.registry_secret }}
       initContainers:
       - name: wait-scp
-        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}  
         env:
           - name: NETYPE
             value: pcf  
@@ -36,7 +36,7 @@ spec:
           - name: PREFIX
             value: {{ .Values.prefix }}              
       - name: wait-mongodb
-        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}  
         command:
            - "/opt/wait_mongodb.sh"      
         env:
@@ -46,7 +46,7 @@ spec:
             value: {{ .Values.prefix }}                        
       containers:
       - name: {{ .Values.prefix }}-pcf
-        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}:{{ .Values.image_tag }}
+        image: {{ .Values.registry_url }}/{{ .Values.open5gs_image_name }}
         env:
           - name: NETYPE
             value: pcf  
@@ -106,7 +106,7 @@ spec:
     istio: ingressgateway 
   servers:
   - port:
-      number: 80
+      number: 8080
       name: http2
       protocol: HTTP2
     hosts:

@@ -7,7 +7,6 @@ open5gs_image_name: ${OPEN5GS_IMAGE_NAME}
 ueramsim_image_name: ${UERAMSIM_IMAGE_NAME}
 dbctl_image_name: ${DBCTL_IMAGE_NAME}
 test_image_name: ${TEST_IMAGE_NAME}
-image_tag: ${IMAGE_TAG}
 mcc: ${MCC}
 mnc: ${MNC}
 tac: ${TAC}

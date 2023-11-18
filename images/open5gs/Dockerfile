@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl \
 RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:open5gs/latest && \
                                    apt-get -y install open5gs
 # Install Node.js from NodeSource repository:
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install nodejs
 
 # Change UID and GID of Open5GS user:    

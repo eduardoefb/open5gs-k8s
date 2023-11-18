@@ -13,7 +13,7 @@ spec:
       
       initContainers: 
       - name: wait-mongodb
-        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}  
         command:
            - "/opt/wait_mongodb.sh" 
         env: 
@@ -21,7 +21,7 @@ spec:
             value: {{ .Values.prefix }}
       containers:
       - name: dbctl
-        image: {{ .Values.registry_url }}/{{ .Values.dbctl_image_name }}:{{ .Values.image_tag }}
+        image: {{ .Values.registry_url }}/{{ .Values.dbctl_image_name }}
         env:
           - name: PREFIX
             value: {{ .Values.prefix }}                  

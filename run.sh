@@ -1,12 +1,17 @@
 #!/bin/bash
 
-export UERAMSIM_IMAGE_NAME="ueramsim"
-export INIT_IMAGE_NAME="init"
-export OPEN5GS_IMAGE_NAME="open5gs"
-export DBCTL_IMAGE_NAME="dbctl"
-export DEBUG_IMAGE_NAME="debug"
-export TEST_IMAGE_NAME="testpod"
+# Define the images and tags in the format: <image_name>:<image_tag>
+export UERAMSIM_IMAGE_NAME="ueramsim:0.0.1"
+export INIT_IMAGE_NAME="init:0.0.1"
+export OPEN5GS_IMAGE_NAME="open5gs:0.0.1"
+export DBCTL_IMAGE_NAME="dbctl:0.0.1"
+export DEBUG_IMAGE_NAME="debug:0.0.1"
+export TEST_IMAGE_NAME="testpod:0.0.1"
+
+# Define the registry fqdn:
 export REGISTRY_URL="registry.kube.int/open5gs"
+
+# Other variables:
 export PREFIX="open5gs"
 export NAMESPACE="open5gs"
 export REGISTRY_SECRET_NAME="registry"
@@ -15,33 +20,11 @@ export MNC="17"
 export TAC="100"
 export ISTIO_DOMAIN="${NAMESPACE}.int"
 export INSTALLATION_NAME="open5gs"
-
-function increment_version(){
-  version=${1}
-  max_nbr=20
-  a=`echo ${version} | awk -F \. '{print $1}'`
-  b=`echo ${version} | awk -F \. '{print $2}'`
-  c=`echo ${version} | awk -F \. '{print $3}'`
-  
-
-  c=$((${c}+1))
-  if [ ${c} -gt 9 ]; then
-     c=0
-     b=$((${b}+1))
-  fi
-
-  if [ ${b} -gt 9 ]; then
-     b=0
-     a=$((${a}+1))
-  fi  
-
-  echo "${a}.${b}.${c}"
-}
+export IMAGE_VERSION="0.0.1"
+export HELM_VERSION="0.0.1"
 
 function build(){  
-  max_attempts=10
-  increment_version ${IMAGE_TAG} > IMAGE_TAG
-  export IMAGE_TAG=`cat IMAGE_TAG`
+  max_attempts=10  
   cwd=`pwd`
   for image_dir in images/*; do
     cd ${cwd}
@@ -123,26 +106,14 @@ fi
 
 cwd=`pwd`
 
-if [ ! -f REGISTRY_URL ]; then
-  echo "Enter the retistry url: Default: ${REGISTRY_URL}"
-  read r
-  if [ ! -z "${r}" ]; then 
-    REGISTRY_URL=${r}
-  fi
-  echo ${REGISTRY_URL} > REGISTRY_URL
-else
-  REGISTRY_URL=`cat REGISTRY_URL`
-fi 
+echo "Enter the retistry url: Default: ${REGISTRY_URL}"
+read r
+if [ ! -z "${r}" ]; then 
+  REGISTRY_URL=${r}
+fi
+echo ${REGISTRY_URL} > REGISTRY_URL
 
 podman login ${REGISTRY_URL}
-
-## Check version:
-if [ ! -f IMAGE_TAG ]; then
-  echo "0.0.0" > IMAGE_TAG
-fi
-
-export IMAGE_TAG=`cat IMAGE_TAG`
-export REGISTRY_URL
 
 ## Create .values file:
 

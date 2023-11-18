@@ -26,7 +26,7 @@ spec:
       - name: {{ .Values.registry_secret }}
       initContainers:
       - name: wait-gnodeb
-        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}:{{ .Values.image_tag }}  
+        image: {{ .Values.registry_url }}/{{ .Values.init_image_name }}  
         command:
            - "/opt/wait_gnodeb.sh"  
         env: 
@@ -34,7 +34,7 @@ spec:
             value: {{ .Values.prefix }}                   
       containers:
       - name: {{ .Values.prefix }}-ue
-        image: {{ .Values.registry_url }}/{{ .Values.ueramsim_image_name }}:{{ .Values.image_tag }} 
+        image: {{ .Values.registry_url }}/{{ .Values.ueramsim_image_name }} 
         securityContext:
           capabilities:
             add: ["NET_ADMIN", "SYS_TIME"]
