@@ -88,7 +88,7 @@ function deploy(){
 
 function usage(){
   echo "Usage:"
-  echo "${0} <build>|<deploy>>"
+  echo "${0} <build>|<deploy>"
   exit 1
 }
 

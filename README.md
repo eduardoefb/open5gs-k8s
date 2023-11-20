@@ -380,11 +380,13 @@ python3 concealing_tool.py --conceal \
 
 # Deconcealing SUCI to SUPI using the private key
 python3 concealing_tool.py \
+   --deconceal \
    --suci_string suci-0-724-17-0000-1-1-8C9B6F15816ED9DD6D4463DD07A319D42618B2E46FEA1233D21599E55B851A49F53FD8D00F98172357C0AD2361  \
    --private_key_file /tmp/private_key.pem
 
 # Or, from the json file:  
-python3 concealing_tool.py --deconceal \
+python3 concealing_tool.py \
+   --deconceal \
    --json_file suci_json.json --private_key_file /tmp/private_key.pem
 
 # Review the JSON file created by the script:
