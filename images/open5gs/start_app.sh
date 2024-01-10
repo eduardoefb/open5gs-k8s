@@ -14,7 +14,7 @@ if [ "${NETYPE}" == "upf" ]; then
         /usr/bin/open5gs-${NETYPE}d -c /etc/open5gs/${NETYPE}.yaml -d  > /var/log/upf.log &
     fi
     sleep 10
-    addr=`cat /etc/open5gs/upf.yaml  | grep -A1 subnet: | grep "addr:" | awk '{print $NF}'`
+    addr=`cat /etc/open5gs/upf.yaml  | grep -A1 subnet: | grep "subnet:" | awk '{print $NF}'`
     ip addr add ${addr} dev ogstun
     ip link set ogstun up
     echo 1 > /proc/sys/net/ipv4/ip_forward

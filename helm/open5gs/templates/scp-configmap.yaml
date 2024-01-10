@@ -1,32 +1,22 @@
 apiVersion: v1
 data:
   scp.yaml: |
-    db_uri: mongodb://{{ .Values.prefix }}-mongodb/open5gs
     logger:
-        file: /var/log/open5gs/scp.log
-    sbi:
-        server:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/scp.key
-          cert: /etc/open5gs/tls/scp.crt
-        client:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/scp.key
-          cert: /etc/open5gs/tls/scp.crt
+      file: /var/log/open5gs/scp.log
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+
     scp:
-        sbi:
-          - addr: 0.0.0.0
+      sbi:
+        server:
+          - address: 0.0.0.0
             port: 8080
-    nrf:
-        sbi:
-          - addr:
-              - {{ .Values.prefix }}-nrf
-            port: 8080
-    parameter:
-    max:
-    time:
+        client:
+          nrf:
+            - uri: http://{{ .Values.prefix }}-nrf:8080
+
 kind: ConfigMap
 metadata:
   name: {{ .Values.prefix }}-scp

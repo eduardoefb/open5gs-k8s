@@ -3,33 +3,25 @@ data:
   pcf.yaml: |
     db_uri: mongodb://{{ .Values.prefix }}-mongodb/open5gs
     logger:
-        file: /var/log/open5gs/pcf.log
-    sbi:
-        server:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/pcf.key
-          cert: /etc/open5gs/tls/pcf.crt
-        client:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/pcf.key
-          cert: /etc/open5gs/tls/pcf.crt
+      file: /var/log/open5gs/pcf.log
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+
     pcf:
-        sbi:
-          - addr: 0.0.0.0
+      sbi:
+        server:
+          - address: 0.0.0.0
             port: 8080
-        metrics:
-          - addr: 0.0.0.0
+        client:
+          scp:
+            - uri: http://{{ .Values.prefix }}-scp:8080
+      metrics:
+        server:
+          - address: 0.0.0.0
             port: 9090
 
-    scp:
-        sbi:
-          - addr: {{ .Values.prefix }}-scp
-            port: 8080
-    parameter:
-    max:
-    time:
 kind: ConfigMap
 metadata:
   name: {{ .Values.prefix }}-pcf    

@@ -3,29 +3,21 @@ data:
   udr.yaml: |
     db_uri: mongodb://{{ .Values.prefix }}-mongodb/open5gs
     logger:
-        file: /var/log/open5gs/udr.log
-    sbi:
-        server:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/udr.key
-          cert: /etc/open5gs/tls/udr.crt
-        client:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/udr.key
-          cert: /etc/open5gs/tls/udr.crt
+      file: /var/log/open5gs/udr.log
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+
     udr:
-        sbi:
-          - addr: 0.0.0.0
+      sbi:
+        server:
+          - address: 0.0.0.0
             port: 8080
-    scp:
-        sbi:
-          - addr: {{ .Values.prefix }}-scp
-            port: 8080
-    parameter:
-    max:
-    time:
+        client:
+          scp:
+            - uri: http://{{ .Values.prefix }}-scp:8080
+
 kind: ConfigMap
 metadata:
   name: {{ .Values.prefix }}-udr

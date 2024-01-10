@@ -2,29 +2,21 @@ apiVersion: v1
 data:
   bsf.yaml: |
     logger:
-        file: /var/log/open5gs/bsf.log
-    sbi:
-        server:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/bsf.key
-          cert: /etc/open5gs/tls/bsf.crt
-        client:
-          no_tls: true
-          cacert: /etc/open5gs/tls/ca.crt
-          key: /etc/open5gs/tls/bsf.key
-          cert: /etc/open5gs/tls/bsf.crt
+      file: /var/log/open5gs/bsf.log
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+
     bsf:
-        sbi:
-          - addr: 0.0.0.0
+      sbi:
+        server:
+          - address: 0.0.0.0
             port: 8080
-    scp:
-        sbi:
-          - addr: {{ .Values.prefix }}-scp
-            port: 8080
-    parameter:
-    max:
-    time:
+        client:
+          scp:
+            - uri: http://{{ .Values.prefix }}-scp:8080
+
 kind: ConfigMap
 metadata:
   name: {{ .Values.prefix }}-bsf

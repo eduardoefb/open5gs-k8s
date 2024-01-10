@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Define the images and tags in the format: <image_name>:<image_tag>
-export UERAMSIM_IMAGE_NAME="ueramsim:0.0.1"
-export INIT_IMAGE_NAME="init:0.0.1"
-export OPEN5GS_IMAGE_NAME="open5gs:0.0.1"
-export DBCTL_IMAGE_NAME="dbctl:0.0.1"
-export DEBUG_IMAGE_NAME="debug:0.0.1"
-export TEST_IMAGE_NAME="testpod:0.0.1"
+export UERAMSIM_IMAGE_NAME="ueramsim:0.0.2"
+export INIT_IMAGE_NAME="init:0.0.2"
+export OPEN5GS_IMAGE_NAME="open5gs:0.0.2"
+export DBCTL_IMAGE_NAME="dbctl:0.0.2"
+export DEBUG_IMAGE_NAME="debug:0.0.2"
+export TEST_IMAGE_NAME="testpod:0.0.2"
 
 # Define the registry fqdn:
 export REGISTRY_URL="registry.kube.int/open5gs"
@@ -20,8 +20,8 @@ export MNC="17"
 export TAC="100"
 export ISTIO_DOMAIN="${NAMESPACE}.int"
 export INSTALLATION_NAME="open5gs"
-export IMAGE_VERSION="0.0.1"
-export HELM_VERSION="0.0.1"
+export IMAGE_VERSION="0.0.2"
+export HELM_VERSION="0.0.2"
 
 function build(){  
   max_attempts=10  
